@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block code %}
+{% block bodycode %}
   <table class="table">
     <tr>
       <th>Index</th>
@@ -11,12 +11,14 @@
     </tr>
     <tbody>
       {% for item in object_list %}
-        <tr>{{item.id}}</tr>
-        <tr>{{item.FirstName}}</tr>
-        <tr>{{item.LastName}}</tr>
-        <tr>{{item.eMail}}</tr>
-        <tr>{{item.UserType}}</tr>
-        <tr>{{item.active}}</tr>
+        <tr>
+          <td>{{item.id}}</td>
+          <td>{{item.FirstName}}</td>
+          <td>{{item.LastName}}</td>
+          <td>{{item.eMail}}</td>
+          <td>{{item.UserType}}</td>
+          <td>{{item.active}}</td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>

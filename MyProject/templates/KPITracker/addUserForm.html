@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block bodycode %}
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      {{ field.label }} {{ field }}
+    <span>{{ field.errors }}</span>
+    {% endfor %}
+    <button type="submit">Add</button>
+  </form>
+{% endblock %}
