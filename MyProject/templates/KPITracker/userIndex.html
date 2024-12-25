@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block code %}
+  <table class="table">
+    <tr>
+      <th>Index</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>eMail</th>
+      <th>User Type</th>
+      <th>Active</th>
+    </tr>
+    <tbody>
+      {% for item in object_list %}
+        <tr>{{item.id}}</tr>
+        <tr>{{item.FirstName}}</tr>
+        <tr>{{item.LastName}}</tr>
+        <tr>{{item.eMail}}</tr>
+        <tr>{{item.UserType}}</tr>
+        <tr>{{item.active}}</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
