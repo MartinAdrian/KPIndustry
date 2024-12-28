@@ -1,9 +1,17 @@
 {% extends 'base.html' %}
-{% block bodycode %}
+{% block content %}
   <form method="post">
     {% csrf_token %}
     {% for field in form %}
-      {{ field.label }} {{ field }}
+      {% if field.label != 'User Type' %}
+        {{ field.label }} {{ field }}
+      {% else %}
+        {{ field.label }} <select name="UserType" class="filter-selectbox">
+                            <option value="tester">Tester</option>
+                            <option value="leadtester">Lead Tester</option>
+                            <option value="projectmanager">Project Manager</option>
+                          </select>
+      {% endif %}
     <span>{{ field.errors }}</span>
     {% endfor %}
     <button type="submit">Add</button>
