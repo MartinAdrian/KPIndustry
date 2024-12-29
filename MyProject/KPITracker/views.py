@@ -14,11 +14,16 @@ class UserView(ListView):
 class CreateUserView(CreateView):
     model = UserList
     fields = ["FirstName", "LastName", "eMail", "UserType"]
-    template_name = "KPITracker/addUserForm.html"
+    template_name = "KPITracker/userIndex.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["objects"] = self.model.objects.all()
+        return context
 
     def get_success_url(self):
-        return reverse("KPIndustry:homepage")
+        return reverse("KPIndustry:view-users")
 
 class ManageUserView(UpdateView):
     model = UserList
-    template_name = "KPITracker/manageUserPage.html"
+    template_name = "KPITracker/userIndex.html"
