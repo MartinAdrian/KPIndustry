@@ -4,7 +4,7 @@
     {% csrf_token %}
     <table>
       <tr>
-        <th colspan="5" style="background-color: rgba(0,0,0,0.2)">
+        <th colspan="6" style="background-color: rgba(0,0,0,0.2)">
           Add To Database
         </th>
       </tr>
@@ -29,14 +29,14 @@
             </td>
           {% endif %}
         {% endfor %}
-          <td><button type="submit">Add</button></td>
+          <td style="width: 10px"><button type="submit">Add</button></td>
       </tr>
     </table>
   </form>
   <div style="height: 5px"></div>
   <table>
     <tr>
-      <th colspan="7" style="background-color: rgba(0,0,0,0.2)">
+      <th colspan="8" style="background-color: rgba(0,0,0,0.2)">
         Manage Database
       </th>
     </tr>
@@ -45,6 +45,7 @@
       <th>First Name</th>
       <th>Last Name</th>
       <th>eMail</th>
+      <th>Username</th>
       <th>User Type</th>
       <th>Active</th>
       <th>Action</th>
@@ -56,8 +57,9 @@
           <td>{{item.FirstName}}</td>
           <td>{{item.LastName}}</td>
           <td>{{item.eMail}}</td>
+          <td>{{item.Username}}</td>
           <td>{{item.UserType}}</td>
-          <td>{{item.active}}</td>
+          <td>{{item.Active}}</td>
           <td>
             <table>
               <tr>

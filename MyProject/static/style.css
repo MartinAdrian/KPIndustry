@@ -96,10 +96,6 @@ th, td {
     background-color: rgba(255, 4, 0, 0.4);
 }
 
-.btn-text {
-    color: black;
-}
-
 .menu-btn {
-
+    background-color: blue;
 }
