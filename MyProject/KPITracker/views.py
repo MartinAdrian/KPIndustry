@@ -19,7 +19,7 @@ class UserView(ListView):
 class CreateUserView(CreateView):
 
     model = UserList
-    fields = ["FirstName", "LastName", "eMail", "Username", "UserType"]
+    fields = ["first_name", "last_name", "email", "username", "UserType"]
     template_name = "KPITracker/userIndex.html"
 
     def get_context_data(self, **kwargs):

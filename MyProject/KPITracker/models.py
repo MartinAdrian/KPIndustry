@@ -1,19 +1,13 @@
+from django.contrib.auth.models import User
 from django.db import models
 
-class UserList(models.Model):
 
-    FirstName = models.CharField("First Name", max_length=100)
-    LastName = models.CharField("Last Name", max_length=100)
-    eMail = models.CharField("eMail", max_length=100)
-    Username = models.CharField("Username", max_length=100)
-    Password = models.CharField("Password", max_length=100, default="admin")
+class UserList(User):
+
     UserType = models.CharField("User Type", max_length=100)
-    SuperUser = models.BooleanField(default=False)
-    Active = models.BooleanField(default=True)
-    DateJoined = models.TimeField()
 
-    def __str__(self):
-        return f"{self.FirstName} {self.LastName}:\neMail: {self.eMail}\nType: {self.UserType}"
+    # def __str__(self):
+    #     return f"{self.FirstName} {self.LastName}:\neMail: {self.eMail}\nType: {self.UserType}"
 
 
 class Projects(models.Model):
