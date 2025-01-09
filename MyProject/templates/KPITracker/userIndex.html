@@ -1,5 +1,5 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'homepage.html' %}
+{% block content2 %}
   <form method="post">
     {% csrf_token %}
     <table>
@@ -17,7 +17,9 @@
       <tr>
         {% for field in form %}
           {% if field.label != 'User Type' %}
-            <td>{{ field }}</td>
+            <td>
+              {{ field }}
+            </td>
           {% else %}
             <td>
               <select name="UserType" class="filter-selectbox">

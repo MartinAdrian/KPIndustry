@@ -6,8 +6,8 @@ class UserList(User):
 
     UserType = models.CharField("User Type", max_length=100)
 
-    # def __str__(self):
-    #     return f"{self.FirstName} {self.LastName}:\neMail: {self.eMail}\nType: {self.UserType}"
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}:\neMail: {self.email}\nType: {self.UserType}"
 
 
 class Projects(models.Model):

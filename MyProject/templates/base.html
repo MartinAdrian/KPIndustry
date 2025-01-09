@@ -11,26 +11,14 @@
   <div class="background-img">
     <div class="banner-area">
       <div class="banner1">
-        <a href="http://127.0.0.1:8001/KPIndustry/"><img src="{% static 'Logo.png' %}" height="100"></a>
+        <a href="{% url 'KPIndustry:homepage' %}"><img src="{% static 'Logo.png' %}" height="100"></a>
       </div>
       <div class="banner2">
         <p>KPI Tracker by Adrian Martin</p>
       </div>
     </div>
-    <div style="padding-top: 5px; height: calc(100% - 5px); width: calc(100% - 20px - 200px)">
-      <div class="content-area">
-        {% block content %}
-        {% endblock %}
-      </div>
-    </div>
-    <div class="menu-area">
-      <p class="top-text">Main Menu</p>
-      <a href="{% url 'KPIndustry:view-users' %}">
-        <button style="background-color: rgba(0, 0, 0, 0); border-radius: 5px; width: 100%; font-size: 15px; padding: 5px">
-          Manage Users
-        </button>
-      </a>
-    </div>
+    {% block content %}
+    {% endblock %}
   </div>
 </body>
 </html>

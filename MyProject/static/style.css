@@ -83,7 +83,6 @@ th, td {
   border: 1px solid rgba(0,0,0,0.4);
   border-radius: 5px;
   padding-top: 2px;
-  padding-bottom: 2px;
   font-weight: bold;
   font-size: 24px;
 }
@@ -94,8 +93,4 @@ th, td {
 
 .deactivate-btn {
     background-color: rgba(255, 4, 0, 0.4);
-}
-
-.menu-btn {
-    background-color: blue;
 }

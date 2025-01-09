@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div style="padding-top: 5px; height: calc(100% - 5px); width: calc(100% - 20px - 200px)">
+    <div class="content-area">
+      {% block content2 %}
+      {% endblock %}
+    </div>
+  </div>
+  <div class="menu-area">
+    <p class="top-text">Main Menu</p>
+    <a href="{% url 'KPIndustry:manage-users' %}">
+      <button class="menu-btn">
+        Manage Users
+      </button>
+    </a>
+  </div>
+{% endblock %}

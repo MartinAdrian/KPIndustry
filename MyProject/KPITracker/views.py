@@ -1,22 +1,23 @@
 from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse
 from django.shortcuts import render
 from .models import UserList
 
-class HomeView(ListView):
+class HomeView(LoginRequiredMixin, ListView):
 
     model = UserList
-    template_name = "base.html"
+    template_name = "homepage.html"
 
 
-class UserView(ListView):
+class UserView(LoginRequiredMixin, ListView):
 
     model = UserList
     template_name = "KPITracker/userIndex.html"
 
 
-class CreateUserView(CreateView):
+class CreateUserView(LoginRequiredMixin, CreateView):
 
     model = UserList
     fields = ["first_name", "last_name", "email", "username", "UserType"]
@@ -31,7 +32,7 @@ class CreateUserView(CreateView):
         return reverse("KPIndustry:view-users")
 
 
-class ManageUserView(UpdateView):
+class ManageUserView(LoginRequiredMixin, UpdateView):
 
     model = UserList
     template_name = "KPITracker/userIndex.html"
