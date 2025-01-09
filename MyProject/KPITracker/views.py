@@ -1,24 +1,38 @@
+from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse
 from django.shortcuts import render
-from KPITracker.models import UserList
+from .models import UserList
 
-class HomeView(ListView):
+class HomeView(LoginRequiredMixin, ListView):
+
     model = UserList
-    template_name = "base.html"
+    template_name = "homepage.html"
 
-class UserView(ListView):
+
+class UserView(LoginRequiredMixin, ListView):
+
     model = UserList
     template_name = "KPITracker/userIndex.html"
 
-class CreateUserView(CreateView):
+
+class CreateUserView(LoginRequiredMixin, CreateView):
+
     model = UserList
-    fields = ["FirstName", "LastName", "eMail", "UserType"]
-    template_name = "KPITracker/addUserForm.html"
+    fields = ["first_name", "last_name", "email", "username", "UserType"]
+    template_name = "KPITracker/userIndex.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["objects"] = self.model.objects.all()
+        return context
 
     def get_success_url(self):
-        return reverse("KPIndustry:homepage")
+        return reverse("KPIndustry:view-users")
 
-class ManageUserView(UpdateView):
+
+class ManageUserView(LoginRequiredMixin, UpdateView):
+
     model = UserList
-    template_name = "KPITracker/manageUserPage.html"
+    template_name = "KPITracker/userIndex.html"

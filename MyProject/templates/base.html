@@ -4,31 +4,22 @@
 <head>
   <meta name="viewport" content="user-scaleable=no">
   <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="{% static 'style.css' %}">
   <title>Industry</title>
 </head>
 <body>
   <div class="background-img">
     <div class="banner-area">
       <div class="banner1">
-        <a href="http://127.0.0.1:8000/KPIndustry/"><img src="{% static 'Logo.png' %}" height="100"></a>
+        {% block logo %}
+        {% endblock %}
       </div>
       <div class="banner2">
         <p>KPI Tracker by Adrian Martin</p>
       </div>
     </div>
-    <div style="padding-top: 5px; height: calc(100% - 5px); width: calc(100% - 20px - 200px)">
-      <div class="content-area">
-        {% block content %}
-        {% endblock %}
-      </div>
-    </div>
-    <div class="menu-area">
-      <p class="top-text">Main Menu</p>
-      <a href="{% url 'KPIndustry:view-users' %}">View Users</a>
-      <a href="{% url 'KPIndustry:add-user' %}">Add User</a>
-      <a href="{% url 'KPIndustry:manage-users' %}">Manage Users</a>
-    </div>
+    {% block content %}
+    {% endblock %}
   </div>
 </body>
 </html>

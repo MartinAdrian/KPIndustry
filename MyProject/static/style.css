@@ -69,7 +69,7 @@ th, td {
   width: 195px;
   background-color: rgba(0,0,0,0.1);
   position: relative;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 18px);
   left: calc(100% - 215px);
   border-radius: 5px;
   padding-left: 5px;
@@ -83,5 +83,35 @@ th, td {
   border: 1px solid rgba(0,0,0,0.4);
   border-radius: 5px;
   padding-top: 2px;
-  padding-bottom: 2px;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.edit-btn {
+    background-color: rgba(255, 174, 0, 0.4);
+}
+
+.deactivate-btn {
+    background-color: rgba(255, 4, 0, 0.4);
+}
+
+.menu-btn {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 5px;
+    width: 100%;
+    font-size: 15px;
+    padding: 5px
+}
+
+.login {
+    padding-top: 25%;
+    max-width: calc(100% - 20px);
+    max-height: calc(100% - 135px);
+    height: calc(100% - 135px);
+}
+
+.login-area {
+    width: 200px;
+    text-align: center;
+    padding-top: 0px;
 }

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block logo %}
+  <a href="{% url 'KPIndustry:homepage' %}"><img src="{% static 'Logo.png' %}" height="100"></a>
+{% endblock %}
+
+{% block content %}
+
+  <div style="padding-top: 5px; height: calc(100% - 5px); width: calc(100% - 20px - 200px)">
+    <div class="content-area">
+      {% block content2 %}
+        <h1 style="width: 100%; text-align: center">KPI Tracker made by Adrian Martin</h1>
+        <h2>Manage Users:</h2>
+        <p>The main control panel for managing users</p>
+      {% endblock %}
+    </div>
+  </div>
+  <div class="menu-area">
+    <p class="top-text">Main Menu</p>
+    <a href="{% url 'KPIndustry:manage-users' %}">
+      <button class="menu-btn" style="position: relative; top: -15px;">
+        Manage Users
+      </button>
+    </a>
+    <form action="{% url 'KPIndustry:logout' %}" method="post">
+      {% csrf_token %}
+      <button class="menu-btn" style="position: relative; top: -100%; background-color: rgba(255, 0, 0, 0.15)" type="submit">
+        Logout
+      </button>
+    </form>
+  </div>
+
+{% endblock %}
