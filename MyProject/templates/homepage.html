@@ -23,9 +23,24 @@
   </div>
   <div class="menu-area">
     <p class="top-text">Main Menu</p>
-      <a style="text-decoration: none" href="{% url 'KPIndustry:manage-users' %}">
-        <p class="menu-btn">Manage Users</p>
-      </a>
+    <div class="menu-btns">
+        <a style="text-decoration: none" href="{% url 'KPIndustry:manage-users' %}">
+          <p class="menu-btn">Manage Users</p>
+        </a>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+      <p class="menu-btn">Button</p>
+    </div>
     <form action="{% url 'KPIndustry:logout' %}" method="post">
       {% csrf_token %}
       <button class="lo-btn" type="submit">

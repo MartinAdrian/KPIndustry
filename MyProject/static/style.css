@@ -22,16 +22,18 @@ body {
   padding: 5px;
 }
 
-table {
+.content-table {
   border: 1px solid;
   border-collapse: collapse;
   width: 100%;
+  min-width: 583px;
 }
 
 th, td {
   border: 1px solid;
   border-collapse: collapse;
   text-align: center;
+  padding: 1px;
 }
 
 .banner-area {
@@ -50,6 +52,7 @@ th, td {
   height: 100%;
   padding: 5px;
   border-radius: 5px;
+  overflow: auto;
 }
 
 .banner1 {
@@ -138,6 +141,8 @@ th, td {
     font-weight: bold;
     text-align: center;
     line-height: 31px;
+    margin-top: 3px;
+    margin-bottom: 3px;
 }
 
 .menu-btn:hover,
@@ -242,4 +247,19 @@ th, td {
     left: 5px;
     bottom: 5px;
     padding-left: 15px;
+}
+
+.menu-btns {
+    overflow: auto;
+    max-height: 100%;
+    position: fixed;
+    top: 155px;
+    width: 195px;
+    height: calc(100% - 255px);
+    padding: 0px;
+    margin: 0px;
+}
+
+.menu-btns:not(:last-child) {
+  margin-bottom: 1rem;
 }

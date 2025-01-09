@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.shortcuts import render, redirect
 from .models import UserList
 
+
 class HomeView(LoginRequiredMixin, ListView):
 
     model = UserList
