@@ -94,3 +94,24 @@ th, td {
 .deactivate-btn {
     background-color: rgba(255, 4, 0, 0.4);
 }
+
+.menu-btn {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 5px;
+    width: 100%;
+    font-size: 15px;
+    padding: 5px
+}
+
+.login {
+    padding-top: 25%;
+    max-width: calc(100% - 20px);
+    max-height: calc(100% - 135px);
+    height: calc(100% - 135px);
+}
+
+.login-area {
+    width: 200px;
+    text-align: center;
+    padding-top: 0px;
+}

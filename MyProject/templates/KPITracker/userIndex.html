@@ -1,5 +1,7 @@
 {% extends 'homepage.html' %}
+
 {% block content2 %}
+
   <form method="post">
     {% csrf_token %}
     <table>
@@ -80,4 +82,5 @@
       {% endfor %}
     </tbody>
   </table>
+
 {% endblock %}

@@ -11,7 +11,8 @@
   <div class="background-img">
     <div class="banner-area">
       <div class="banner1">
-        <a href="{% url 'KPIndustry:homepage' %}"><img src="{% static 'Logo.png' %}" height="100"></a>
+        {% block logo %}
+        {% endblock %}
       </div>
       <div class="banner2">
         <p>KPI Tracker by Adrian Martin</p>
