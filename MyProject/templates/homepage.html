@@ -4,8 +4,14 @@
   <a href="{% url 'KPIndustry:homepage' %}"><img src="{% static 'Logo.png' %}" height="100"></a>
 {% endblock %}
 
-{% block content %}
+{% block banner2 %}
+  {% if request.user.is_authenticated %}
+  <p>Logged in as:</p>
+  <p>{{ request.user.first_name }} {{ request.user.last_name }}</p>
+  {% endif %}
+{% endblock %}
 
+{% block content %}
   <div style="padding-top: 5px; height: calc(100% - 5px); width: calc(100% - 20px - 200px)">
     <div class="content-area">
       {% block content2 %}
@@ -17,17 +23,14 @@
   </div>
   <div class="menu-area">
     <p class="top-text">Main Menu</p>
-    <a href="{% url 'KPIndustry:manage-users' %}">
-      <button class="menu-btn" style="position: relative; top: -15px;">
-        Manage Users
-      </button>
-    </a>
+      <a style="text-decoration: none" href="{% url 'KPIndustry:manage-users' %}">
+        <p class="menu-btn">Manage Users</p>
+      </a>
     <form action="{% url 'KPIndustry:logout' %}" method="post">
       {% csrf_token %}
-      <button class="menu-btn" style="position: relative; top: -100%; background-color: rgba(255, 0, 0, 0.15)" type="submit">
+      <button class="lo-btn" type="submit">
         Logout
       </button>
     </form>
   </div>
-
 {% endblock %}

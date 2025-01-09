@@ -3,22 +3,22 @@
 body {
   margin: 0;
   padding: 0;
-}
-
-.background-img {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  bottom: 0;
-  top: 0;
-  left: 0;
-  right: 0;
   background-image: url("background.jpg");
   background-color: rgba(255,255,255,0.4);
   background-blend-mode: lighten;
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.background-img {
+  width: 100%;
+  height: calc(100% - 55px);
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   padding: 5px;
 }
 
@@ -58,10 +58,12 @@ th, td {
 }
 
 .banner2 {
-  width: 100px;
-  position: relative;
+  width: 125px;
   left: calc(100% - 100px);
-  top: -85px;
+  position: fixed;
+  top: 10px;
+  left: calc(100% - 125px);
+  text-weight: bold;
 }
 
 .menu-area {
@@ -80,38 +82,164 @@ th, td {
   position: relative;
   top: 5px;
   text-align: center;
-  border: 1px solid rgba(0,0,0,0.4);
-  border-radius: 5px;
   padding-top: 2px;
   font-weight: bold;
   font-size: 24px;
 }
 
 .edit-btn {
+    background-color: rgba(255, 174, 0, 0.2);
+    display: block;
+    color: black;
+    text-decoration: none;
+}
+
+.edit-btn:hover,
+.edit-btn:focus {
     background-color: rgba(255, 174, 0, 0.4);
+    text-decoration: underline;
 }
 
 .deactivate-btn {
+    background-color: rgba(255, 4, 0, 0.2);
+    display: block;
+    color: black;
+    text-decoration: none;
+}
+
+.deactivate-btn:hover,
+.deactivate-btn:focus {
     background-color: rgba(255, 4, 0, 0.4);
+    text-decoration: underline;
+}
+
+.reactivate-btn {
+    background-color: rgba(4, 255, 0, 0.2);
+    display: block;
+    color: black;
+    text-decoration: none;
+}
+
+.reactivate-btn:hover,
+.reactivate-btn:focus {
+    background-color: rgba(4, 255, 0, 0.4);
+    text-decoration: underline;
 }
 
 .menu-btn {
     background-color: rgba(0, 0, 0, 0);
     border-radius: 5px;
-    width: 100%;
-    font-size: 15px;
-    padding: 5px
+    border: 1px solid rgba(0,0,0,0.5);
+    width: calc(100% - 2px);
+    height: 31px;
+    font-size: 18px;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    line-height: 31px;
+}
+
+.menu-btn:hover,
+.menu-btn:focus {
+  background-color: rgba(0,0,0,0.2);
+  color: black;
+  text-decoration: underline;
+}
+
+.menu-btn:active {
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+  color: black;
+  font-size: 18px;
 }
 
 .login {
-    padding-top: 25%;
     max-width: calc(100% - 20px);
     max-height: calc(100% - 135px);
     height: calc(100% - 135px);
 }
 
 .login-area {
+    position: relative;
     width: 200px;
+    height: 100px;
     text-align: center;
-    padding-top: 0px;
+    top: calc(25% - 50px);
+    left: calc(50% - 100px);
+}
+
+.login-text {
+    size: 23px;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.li-btn {
+    background-color: rgba(0,0,0,0);
+    width: 85px;
+    height: 28px;
+    padding: 3px;
+    font-weight: bold;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.li-btn:hover,
+.li-btn:focus {
+    background-color: rgba(0,0,0,0.2);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.lo-btn {
+    width: 195px;
+    border-shadow: none;
+    border: 1px solid rgba(0,0,0,0.3);
+    border-radius: 5px;
+    height: 31px;
+    font-weight: bold;
+    background-color: rgba(255, 0, 0, 0.15);
+    font-size: 15px;
+    position: fixed;
+    bottom: 65px;
+}
+
+.lo-btn:hover,
+.lo-btn:focus {
+    cursor: pointer;
+    background-color: rgba(255, 0, 0, 0.25);
+    text-decoration: underline;
+}
+
+.add-box,
+.choose-box,
+.box-btn {
+    width: calc(100% - 10px);
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.add-box:focus,
+.choose-box:focus {
+    border: 1px solid black;
+    border-shadow: none;
+    outline: none;
+}
+
+.box-btn:hover,
+.box-btn:focus {
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+}
+
+.footer {
+    background-color: rgba(0,0,0,0.1);
+    width: calc(100% - 25px);
+    border-radius: 5px;
+    position: fixed;
+    left: 5px;
+    bottom: 5px;
+    padding-left: 15px;
 }

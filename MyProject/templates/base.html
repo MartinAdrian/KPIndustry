@@ -15,11 +15,17 @@
         {% endblock %}
       </div>
       <div class="banner2">
-        <p>KPI Tracker by Adrian Martin</p>
+        {% block banner2 %}
+        {% endblock %}
       </div>
     </div>
     {% block content %}
     {% endblock %}
   </div>
 </body>
+<footer class="footer">
+  <div>
+    <p>© {% now "Y" %} Adrian-Ionut Martin / KPIndustry</p>
+  </div>
+</footer>
 </html>
