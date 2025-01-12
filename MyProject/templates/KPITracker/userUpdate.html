@@ -6,8 +6,8 @@
     {% csrf_token %}
     <table class="content-table">
       <tr>
-        <th colspan="7" style="background-color: rgba(0,0,0,0.2)">
-          Add To Database
+        <th colspan="6" style="background-color: rgba(0,0,0,0.2)">
+          Edit Info
         </th>
       </tr>
       <tr>
@@ -21,23 +21,35 @@
           {% if field.label == 'User Type' %}
             <td>
               <select class="choose-box" name="user_type" style="width: calc(100% - 3px)" required>
-                <option value="Tester">Tester</option>
-                <option value="Lead Tester">Lead Tester</option>
-                <option value="Project Manager">Project Manager</option>
-                <option value="Administrator">Administrator</option>
+                {% if field.value == "Tester" %}
+                  <option value="Tester" selected="selected">Tester</option>
+                {% else %}
+                  <option value="Tester">Tester</option>
+                {% endif %}
+                {% if field.value == "Lead Tester" %}
+                  <option value="Lead Tester" selected="selected">Lead Tester</option>
+                {% else %}
+                  <option value="Lead Tester">Lead Tester</option>
+                {% endif %}
+                {% if field.value == "Project Manager" %}
+                  <option value="Project Manager" selected="selected">Project Manager</option>
+                {% else %}
+                  <option value="Project Manager">Project Manager</option>
+                {% endif %}
+                {% if field.value == "Administrator" %}
+                  <option value="Administrator" selected="selected">Administrator</option>
+                {% else %}
+                  <option value="Administrator">Administrator</option>
+                {% endif %}
               </select>
-            </td>
-          {% elif field.label == "Password" %}
-            <td>
-              <input class="form-control add-box" type="password" name="{{ field.html_name }}" autocomplete="off" required>
             </td>
           {% else %}
             <td>
-              <input class="form-control add-box" type="text" name="{{ field.html_name }}" autocomplete="off" required>
+              <input class="form-control add-box" type="text" name="{{ field.html_name }}" autocomplete="off" required value="{{ field.value }}">
             </td>
           {% endif %}
         {% endfor %}
-          <td style="width: 10px"><button class="box-btn" type="submit">Add</button></td>
+          <td><button style="width: 50px" class="box-btn" type="submit">Modify</button></td>
       </tr>
     </table>
   </form>

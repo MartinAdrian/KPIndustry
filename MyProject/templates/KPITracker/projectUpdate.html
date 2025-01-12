@@ -1,0 +1,143 @@
+{% extends 'homepage.html' %}
+
+{% block content2 %}
+
+  <form method="post">
+    {% csrf_token %}
+    <table class="content-table">
+      <tr>
+        <th colspan="7" style="background-color: rgba(0,0,0,0.2)">
+          Add To Database
+        </th>
+      </tr>
+      <tr>
+        {% for field in form %}
+          <th>
+            {{ field.label }}
+          </th>
+        {% endfor %}
+          <th>
+            Action
+          </th>
+      </tr>
+      <tr>
+        {% for field in form %}
+          <td>
+            {% if field.label == "Project Manager" %}
+              <select class="choose-box" name="project_manager">
+                {% for item in users %}
+                  {% if item.user_type == "Project Manager" %}
+                    {% if field.value == item.first_name + " " + item.last_name %}
+                      <option value="{{ item.first_name }} {{ item.last_name }}" selected="selected">
+                        {{ item.first_name }} {{ item.last_name }}
+                      </option>
+                    {% else %}
+                      <option value="{{ item.first_name }} {{ item.last_name }}">
+                        {{ item.first_name }} {{ item.last_name }}
+                      </option>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </select>
+            {% else %}
+              <input class="form-control add-box" type="text" name="{{ field.html_name }}" autocomplete="off" required value="{{ field.value }}">
+            {% endif %}
+          </td>
+        {% endfor %}
+          <td style="width: 10px">
+            <button class="box-btn" type="submit">
+              Add
+            </button>
+          </td>
+      </tr>
+    </table>
+  </form>
+  <div style="height: 5px"></div>
+  <table class="content-table">
+    <tr>
+      <th colspan="8" style="background-color: rgba(0,0,0,0.2)">
+        Manage Database
+      </th>
+    </tr>
+    <tr>
+      <th>
+        Index
+      </th>
+      <th>
+        Project Name
+      </th>
+      <th>
+        Project Manager
+      </th>
+      <th>
+        Lead Testers
+      </th>
+      <th>
+        Testers
+      </th>
+      <th>
+        Ongoing
+      </th>
+      <th>
+        Action
+      </th>
+    </tr>
+    <tbody>
+      {% for item in objects %}
+        <tr>
+          <td>
+            {{item.id}}
+          </td>
+          <td>
+            {{item.project_name}}
+          </td>
+          <td>
+            {{item.project_manager}}
+          </td>
+          <td>
+            {% for user in users %}
+              {% if user.user_type == "Lead Tester" %}
+                {% if user.on_project == item.project_name %}
+                  <p style="margin: 0px">{{ user.first_name }} {{ user.last_name }}</p>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </td>
+          <td>
+            {{item.project_testers}}
+          </td>
+          <td>
+            {{ item.project_activity }}
+          </td>
+          <td style="max-width: 75px; width: 75px">
+            <table class="custom-table" style="border-collapse: collapse; width: 100%">
+              <tr>
+                <td style="padding: 0px">
+                  <a class="edit-btn" href="{% url 'KPIndustry:update-project' item.id %}">Edit</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 0px">
+                  {% if item.active == True %}
+                  <a class="deactivate-btn" href="{% url 'KPIndustry:finish-project' item.id %}">
+                    Finish
+                  </a>
+                  {% else %}
+                  <a class="reactivate-btn" href="{% url 'KPIndustry:reopen-project' item.id %}">
+                    {% if item.project_activity == "Not Started" %}
+                      Start
+                    {% else %}
+                      Reopen
+                    {% endif %}
+                  </a>
+                  {% endif %}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

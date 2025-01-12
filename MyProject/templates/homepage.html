@@ -6,8 +6,8 @@
 
 {% block banner2 %}
   {% if request.user.is_authenticated %}
-  <p>Logged in as:</p>
-  <p>{{ request.user.first_name }} {{ request.user.last_name }}</p>
+      <p style="margin:0px; text-align: center">Logged in as:</p>
+      <p style="margin: 0px; font-weight: bold; text-align: center">{{ request.user.first_name }} {{ request.user.last_name }}</p>
   {% endif %}
 {% endblock %}
 
@@ -24,22 +24,32 @@
   <div class="menu-area">
     <p class="top-text">Main Menu</p>
     <div class="menu-btns">
-        <a style="text-decoration: none" href="{% url 'KPIndustry:manage-users' %}">
-          <p class="menu-btn">Manage Users</p>
+        {% for item in users %}
+            {% if item.id == request.user.id %}
+                {% if item.user_type == "Administrator" %}
+                    <a style="text-decoration: none" href="{% url 'KPIndustry:manage-users' %}">
+                      <p class="menu-btn">Manage Users</p>
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <a style="text-decoration: none" href="{% url 'KPIndustry:manage-projects' %}">
+          <p class="menu-btn">Manage Projects</p>
         </a>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
-      <p class="menu-btn">Button</p>
+        <a style="text-decoration: none" href="">
+          <p class="menu-btn">Button 3</p>
+        </a>
+        <a style="text-decoration: none" href="">
+          <p class="menu-btn">Button 4</p>
+        </a>
+        <a style="text-decoration: none" href="">
+          <p class="menu-btn">Button 5</p>
+        </a>
+        {% if request.user.is_superuser == True %}
+          <a style="text-decoration: none" href="{% url 'admin:index' %}">
+            <p class="menu-btn">Admin Panel</p>
+          </a>
+        {% endif %}
     </div>
     <form action="{% url 'KPIndustry:logout' %}" method="post">
       {% csrf_token %}

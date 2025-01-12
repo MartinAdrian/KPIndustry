@@ -4,13 +4,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView
 from django.urls import reverse
 from django.shortcuts import render, redirect
-from .models import UserList
+from django.apps import apps
+from .models import *
 
 
 class HomeView(LoginRequiredMixin, ListView):
 
     model = UserList
     template_name = "homepage.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["users"] = self.model.objects.all()
+        return context
 
 
 class CreateUserView(LoginRequiredMixin, CreateView):
@@ -22,6 +28,7 @@ class CreateUserView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["objects"] = self.model.objects.all()
+        context["users"] = self.model.objects.all()
         return context
 
     def get_success_url(self):
@@ -37,12 +44,72 @@ class ManageUserView(LoginRequiredMixin, UpdateView):
 @login_required
 def deactivate_user(request, pk):
     UserList.objects.filter(id=pk).update(is_active=False)
-
     return redirect("KPIndustry:manage-users")
 
 
 @login_required
 def reactivate_user(request, pk):
     UserList.objects.filter(id=pk).update(is_active=True)
-
     return redirect("KPIndustry:manage-users")
+
+
+class CreateProjectsView(LoginRequiredMixin, CreateView):
+
+    model = Projects
+    fields = ["project_name", "project_manager", "active"]
+    template_name = "KPITracker/projectsIndex.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["objects"] = self.model.objects.all()
+        context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        return context
+
+    def get_success_url(self):
+        return reverse("KPIndustry:manage-projects")
+
+
+class UpdateUserView(LoginRequiredMixin, UpdateView):
+
+    model = UserList
+    fields = ["first_name", "last_name", "email", "username", "user_type"]
+    template_name = "KPITracker/userUpdate.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["objects"] = self.model.objects.all()
+        context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        return context
+
+    def get_success_url(self):
+        return reverse("KPIndustry:manage-users")
+
+
+@login_required
+def finish_project(request, pk):
+    Projects.objects.filter(id=pk).update(active=False)
+    Projects.objects.filter(id=pk).update(project_activity="Finished")
+    return redirect("KPIndustry:manage-projects")
+
+
+@login_required
+def reopen_project(request, pk):
+    Projects.objects.filter(id=pk).update(active=True)
+    Projects.objects.filter(id=pk).update(project_activity="Ongoing")
+    return redirect("KPIndustry:manage-projects")
+
+
+class UpdateProjectView(LoginRequiredMixin, UpdateView):
+
+    model = Projects
+    fields = ["project_name", "project_manager"]
+    template_name = "KPITracker/projectUpdate.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["objects"] = self.model.objects.all()
+        context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        return context
+
+    def get_success_url(self):
+        return reverse("KPIndustry:manage-projects")
