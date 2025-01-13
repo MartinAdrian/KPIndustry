@@ -27,7 +27,7 @@
               <select class="choose-box" name="project_manager">
                 {% for item in users %}
                   {% if item.user_type == "Project Manager" %}
-                    {% if field.value == "{{item.first_name}} {{item.last_name}}" %}
+                    {% if field.value == item.first_name|add:" item.last_name" %}
                       <option value="{{ item.first_name }} {{ item.last_name }}" selected="selected">
                         {{ item.first_name }} {{ item.last_name }}
                       </option>
@@ -110,30 +110,37 @@
             {{ item.project_activity }}
           </td>
           <td style="max-width: 75px; width: 75px">
-            <table class="custom-table" style="border-collapse: collapse; width: 100%">
-              <tr>
-                <td style="padding: 0px">
-                  <a class="edit-btn" href="{% url 'KPIndustry:update-project' item.id %}">Edit</a>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 0px">
-                  {% if item.active == True %}
-                  <a class="deactivate-btn" href="{% url 'KPIndustry:finish-project' item.id %}">
-                    Finish
-                  </a>
-                  {% else %}
-                  <a class="reactivate-btn" href="{% url 'KPIndustry:reopen-project' item.id %}">
-                    {% if item.project_activity == "Not Started" %}
-                      Start
-                    {% else %}
-                      Reopen
-                    {% endif %}
-                  </a>
-                  {% endif %}
-                </td>
-              </tr>
-            </table>
+            {% for field in form %}
+              {% if field.label == "Project Name" and field.value != item.project_name %}
+                <table class="custom-table" style="border-collapse: collapse; width: 100%">
+                  <tr>
+                    <td style="padding: 0px">
+                      <a class="edit-btn" href="{% url 'KPIndustry:update-project' item.id %}">Edit</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0px">
+                      {% if item.active == True %}
+                      <a class="deactivate-btn" href="{% url 'KPIndustry:finish-project' item.id %}">
+                        Finish
+                      </a>
+                      {% else %}
+                      <a class="reactivate-btn" href="{% url 'KPIndustry:reopen-project' item.id %}">
+                        {% if item.project_activity == "Not Started" %}
+                          Start
+                        {% else %}
+                          Reopen
+                        {% endif %}
+                      </a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                </table>
+              {% elif field.label == "Project Name" and field.value == item.project_name %}
+                <p style="margin: 0px; font-weight: bold">Current</p>
+                <p style="margin: 0px; font-weight: bold">Edit</p>
+              {% endif %}
+            {% endfor %}
           </td>
         </tr>
       {% endfor %}
