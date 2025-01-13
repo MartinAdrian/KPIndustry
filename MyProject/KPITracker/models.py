@@ -11,7 +11,7 @@ class Projects(models.Model):
     active = models.BooleanField("Ongoing")
 
     def save(self, *args, **kwargs):
-        if self.project_activity is None:
+        if self.project_activity is None and self.active == False:
             self.active = False
             self.project_activity = "Not Started"
             super(Projects, self).save(*args, **kwargs)
@@ -19,6 +19,7 @@ class Projects(models.Model):
             self.project_activity = "Finished"
             super(Projects, self).save(*args, **kwargs)
         else:
+            self.project_activity = "Ongoing"
             super(Projects, self).save(*args, **kwargs)
 
     def __str__(self):

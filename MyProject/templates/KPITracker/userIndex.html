@@ -69,22 +69,27 @@
           <td>{{item.user_type}}</td>
           <td>{{item.is_active}}</td>
           <td style="max-width: 75px; width: 75px">
-            <table class="custom-table" style="border-collapse: collapse; width: 100%">
-              <tr>
-                <td style="padding: 0px">
-                  <a class="edit-btn" href="{% url 'KPIndustry:update-user' item.id %}">Edit</a>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 0px">
-                  {% if item.is_active == True %}
-                  <a class="deactivate-btn" href="{% url 'KPIndustry:deactivate-user' item.id %}">Deactivate</a>
-                  {% else %}
-                  <a class="reactivate-btn" href="{% url 'KPIndustry:reactivate-user' item.id %}">Reactivate</a>
-                  {% endif %}
-                </td>
-              </tr>
-            </table>
+            {% if item.first_name != request.user.first_name %}
+              <table class="custom-table" style="border-collapse: collapse; width: 100%">
+                <tr>
+                  <td style="padding: 0px">
+                    <a class="edit-btn" href="{% url 'KPIndustry:update-user' item.id %}">Edit</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 0px">
+                    {% if item.is_active == True %}
+                    <a class="deactivate-btn" href="{% url 'KPIndustry:deactivate-user' item.id %}">Deactivate</a>
+                    {% else %}
+                    <a class="reactivate-btn" href="{% url 'KPIndustry:reactivate-user' item.id %}">Reactivate</a>
+                    {% endif %}
+                  </td>
+                </tr>
+              </table>
+            {% else %}
+              <p style="font-weight: bold; margin: 0px">Current</p>
+              <p style="font-weight: bold; margin: 0px">Login</p>
+            {% endif %}
           </td>
         </tr>
       {% endfor %}
