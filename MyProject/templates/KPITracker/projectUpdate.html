@@ -27,7 +27,7 @@
               <select class="choose-box" name="project_manager">
                 {% for item in users %}
                   {% if item.user_type == "Project Manager" %}
-                    {% if field.value == item.first_name|add:" item.last_name" %}
+                    {% if item.first_name in field.value and item.last_name in field.value %}
                       <option value="{{ item.first_name }} {{ item.last_name }}" selected="selected">
                         {{ item.first_name }} {{ item.last_name }}
                       </option>
@@ -109,7 +109,7 @@
           <td>
             {{ item.project_activity }}
           </td>
-          <td style="max-width: 75px; width: 75px">
+          <td style="max-width: 75px; width: 75px; height: 39px">
             {% for field in form %}
               {% if field.label == "Project Name" and field.value != item.project_name %}
                 <table class="custom-table" style="border-collapse: collapse; width: 100%">
@@ -137,8 +137,8 @@
                   </tr>
                 </table>
               {% elif field.label == "Project Name" and field.value == item.project_name %}
-                <p style="margin: 0px; font-weight: bold">Current</p>
-                <p style="margin: 0px; font-weight: bold">Edit</p>
+                <p class="action-err-txt">Current</p>
+                <p class="action-err-txt">Edit</p>
               {% endif %}
             {% endfor %}
           </td>

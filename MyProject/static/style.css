@@ -268,3 +268,9 @@ th, td {
 .menu-btns:not(:last-child) {
   margin-bottom: 1rem;
 }
+
+.action-err-txt {
+    font-weight: bold;
+    margin: 0px;
+    font-size: 13px
+}

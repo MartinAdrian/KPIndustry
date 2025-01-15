@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.db import models
@@ -8,6 +10,9 @@ class Projects(models.Model):
     project_name = models.CharField("Project Name", max_length=100)
     project_manager = models.CharField("Project Manager", max_length=100)
     project_activity = models.CharField("Project Activity", max_length=100, null=True)
+    start_date=models.DateTimeField(null=True)
+    end_date=models.DateTimeField(null=True)
+    reopened=models.BooleanField(default=False)
     active = models.BooleanField("Ongoing")
 
     def save(self, *args, **kwargs):
@@ -20,6 +25,7 @@ class Projects(models.Model):
             super(Projects, self).save(*args, **kwargs)
         else:
             self.project_activity = "Ongoing"
+            self.start_date = datetime.datetime.now()
             super(Projects, self).save(*args, **kwargs)
 
     def __str__(self):

@@ -1,3 +1,5 @@
+import datetime
+
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,6 +18,7 @@ class HomeView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["users"] = self.model.objects.all()
+        context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
         return context
 
 
@@ -29,6 +32,7 @@ class CreateUserView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["objects"] = self.model.objects.all()
         context["users"] = self.model.objects.all()
+        context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
         return context
 
     def get_success_url(self):
@@ -63,6 +67,7 @@ class CreateProjectsView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
         return context
 
     def get_success_url(self):
@@ -79,6 +84,7 @@ class UpdateUserView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
         return context
 
     def get_success_url(self):
@@ -87,15 +93,19 @@ class UpdateUserView(LoginRequiredMixin, UpdateView):
 
 @login_required
 def finish_project(request, pk):
-    Projects.objects.filter(id=pk).update(active=False)
-    Projects.objects.filter(id=pk).update(project_activity="Finished")
+    Projects.objects.filter(id=pk, end_date=None).update(active=False)
+    Projects.objects.filter(id=pk, end_date=None).update(project_activity="Finished")
+    Projects.objects.filter(id=pk, end_date=None).update(end_date=datetime.datetime.now())
+
     return redirect("KPIndustry:manage-projects")
 
 
 @login_required
 def reopen_project(request, pk):
-    Projects.objects.filter(id=pk).update(active=True)
-    Projects.objects.filter(id=pk).update(project_activity="Ongoing")
+    Projects.objects.filter(id=pk, start_date=None).update(active=True)
+    Projects.objects.filter(id=pk, start_date=None).update(project_activity="Ongoing")
+    Projects.objects.filter(id=pk, start_date=None).update(start_date=datetime.datetime.now())
+
     return redirect("KPIndustry:manage-projects")
 
 
@@ -109,7 +119,18 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
         return context
 
     def get_success_url(self):
         return reverse("KPIndustry:manage-projects")
+
+
+class ViewProjects(LoginRequiredMixin, ListView):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["objects"] = self.model.objects.all()
+        context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        return context
