@@ -8,6 +8,7 @@ from django.db import models
 class Projects(models.Model):
 
     project_name = models.CharField("Project Name", max_length=100)
+    project_partner = models.CharField("Project Partner", max_length=100, null=True)
     project_manager = models.CharField("Project Manager", max_length=100)
     project_activity = models.CharField("Project Activity", max_length=100, null=True)
     start_date=models.DateTimeField(null=True)

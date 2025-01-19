@@ -1,0 +1,41 @@
+{% extends 'homepage.html' %}
+{% load static %}
+{% block logo %}
+  <a href="{% url 'KPIndustry:homepage' %}"><img src="{% static 'Logo.png' %}" height="100"></a>
+{% endblock %}
+
+{% block banner2 %}
+  {% if request.user.is_authenticated %}
+      <p style="margin:0px; text-align: center">Logged in as:</p>
+      <p style="margin: 0px; font-weight: bold; text-align: center">{{ request.user.first_name }} {{ request.user.last_name }}</p>
+  {% endif %}
+{% endblock %}
+
+{% block content2 %}
+
+        <table class="content-table">
+            <thead>
+                <th>Id</th>
+                <th>Project Name</th>
+                <th>Lead Testers</th>
+                <th>Testers</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </thead>
+            <tbody>
+                {% for item in projects %}
+                    {% if request.user.first_name in item.project_manager and request.user.last_name in item.project_manager %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.project_name }}</td>
+                            <td></td>
+                            <td></td>
+                            <td>{{ item.status }}</td>
+                            <td></td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+
+{% endblock %}

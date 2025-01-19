@@ -60,7 +60,7 @@ def reactivate_user(request, pk):
 class CreateProjectsView(LoginRequiredMixin, CreateView):
 
     model = Projects
-    fields = ["project_name", "project_manager", "active"]
+    fields = ["project_name", "project_partner", "project_manager", "active"]
     template_name = "KPITracker/projectsIndex.html"
 
     def get_context_data(self, **kwargs):
@@ -112,7 +112,7 @@ def reopen_project(request, pk):
 class UpdateProjectView(LoginRequiredMixin, UpdateView):
 
     model = Projects
-    fields = ["project_name", "project_manager"]
+    fields = ["project_name", "project_partner", "project_manager"]
     template_name = "KPITracker/projectUpdate.html"
 
     def get_context_data(self, **kwargs):
@@ -127,6 +127,9 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
 
 
 class ViewProjects(LoginRequiredMixin, ListView):
+
+    model = Projects
+    template_name = "KPITracker/projectManagement.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
