@@ -20,28 +20,34 @@
         {% for field in form %}
           {% if field.label == 'User Type' %}
             <td>
-              <select class="choose-box" name="user_type" style="width: calc(100% - 3px)" required>
-                {% if field.value == "Tester" %}
-                  <option value="Tester" selected="selected">Tester</option>
-                {% else %}
-                  <option value="Tester">Tester</option>
-                {% endif %}
-                {% if field.value == "Lead Tester" %}
-                  <option value="Lead Tester" selected="selected">Lead Tester</option>
-                {% else %}
-                  <option value="Lead Tester">Lead Tester</option>
-                {% endif %}
-                {% if field.value == "Project Manager" %}
-                  <option value="Project Manager" selected="selected">Project Manager</option>
-                {% else %}
-                  <option value="Project Manager">Project Manager</option>
-                {% endif %}
-                {% if field.value == "Administrator" %}
-                  <option value="Administrator" selected="selected">Administrator</option>
-                {% else %}
-                  <option value="Administrator">Administrator</option>
-                {% endif %}
-              </select>
+              {% if has_project %}
+                Unassign Projects
+              {% else %}
+                <select class="choose-box" name="user_type" style="width: calc(100% - 3px)" required>
+                  {% if field.value == "Tester" %}
+                    <option value="Tester" selected="selected">Tester</option>
+                  {% else %}
+                    <option value="Tester">Tester</option>
+                  {% endif %}
+                  {% if field.value == "Lead Tester" %}
+                    <option value="Lead Tester" selected="selected">Lead Tester</option>
+                  {% else %}
+                    <option value="Lead Tester">Lead Tester</option>
+                  {% endif %}
+                  {% if not is_taken %}
+                    {% if field.value == "Project Manager" %}
+                      <option value="Project Manager" selected="selected">Project Manager</option>
+                    {% else %}
+                      <option value="Project Manager">Project Manager</option>
+                    {% endif %}
+                    {% if field.value == "Administrator" %}
+                      <option value="Administrator" selected="selected">Administrator</option>
+                    {% else %}
+                      <option value="Administrator">Administrator</option>
+                    {% endif %}
+                  {% endif %}
+                </select>
+              {% endif %}
             </td>
           {% else %}
             <td>
@@ -56,7 +62,7 @@
   <div style="height: 5px"></div>
   <table class="content-table">
     <tr>
-      <th colspan="8" style="background-color: rgba(0,0,0,0.2)">
+      <th colspan="9" style="background-color: rgba(0,0,0,0.2)">
         Manage Database
       </th>
     </tr>
@@ -67,6 +73,7 @@
       <th>eMail</th>
       <th>Username</th>
       <th>User Type</th>
+      <th>On Project/s</th>
       <th>Active</th>
       <th>Action</th>
     </tr>
@@ -79,6 +86,20 @@
           <td>{{item.email}}</td>
           <td>{{item.username}}</td>
           <td>{{item.user_type}}</td>
+          <td>
+            {% if item.user_type == "Project Manager" %}
+              <select class="add-box" style="text-align: center">
+                <option>-- Projects list --</option>
+                {% for project in projects %}
+                  {% if item.first_name in project.project_manager and item.last_name in project.project_manager %}
+                    <option>{{ project.project_name }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            {% else %}
+              {{ item.on_project }}
+            {% endif %}
+          </td>
           <td>{{item.is_active}}</td>
           <td style="max-width: 75px; width: 75px">
             {% if item.first_name != request.user.first_name %}

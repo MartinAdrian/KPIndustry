@@ -95,7 +95,7 @@
       </th>
     </tr>
     <tbody>
-      {% for item in objects %}
+      {% for item in projects %}
         <tr>
           <td>
             {{item.id}}
@@ -110,22 +110,32 @@
             {{item.project_manager}}
           </td>
           <td>
-            {% for user in users %}
-              {% if user.user_type == "Lead Tester" %}
-                {% if user.on_project == item.project_name %}
-                  <p style="margin: 0px">{{ user.first_name }} {{ user.last_name }}</p>
+            <select class="add-box" style="text-align: center">
+              <option>
+                -- Lead Tester List --
+              </option>
+              {% for user in users %}
+                {% if user.user_type == "Lead Tester" %}
+                  {% if user.on_project == item.project_name %}
+                    <option>{{ user.first_name }} {{ user.last_name }}</option>
+                  {% endif %}
                 {% endif %}
-              {% endif %}
-            {% endfor %}
+              {% endfor %}
+            </select>
           </td>
           <td>
-            {% for user in users %}
-              {% if user.user_type == "Tester" %}
-                {% if user.on_project == item.project_name %}
-                  <p style="margin: 0px">{{ user.first_name }} {{ user.last_name }}</p>
+            <select class="add-box" style="text-align: center">
+              <option>
+                -- Tester List --
+              </option>
+              {% for user in users %}
+                {% if user.user_type == "Tester" %}
+                  {% if user.on_project == item.project_name %}
+                    <option>{{ user.first_name }} {{ user.last_name }}</option>
+                  {% endif %}
                 {% endif %}
-              {% endif %}
-            {% endfor %}
+              {% endfor %}
+            </select>
           </td>
           <td>
             {% if item.start_date == None %}

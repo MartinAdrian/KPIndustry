@@ -38,7 +38,7 @@ class Projects(models.Model):
 class UserList(User):
 
     user_type = models.CharField("User Type", max_length=100)
-    on_project = models.CharField("Assigned Project", max_length=100, null=True)
+    on_project = models.CharField("Assigned Project", max_length=100, default="None")
 
     def save(self, *args, **kwargs):
         if not "sha" in self.password:

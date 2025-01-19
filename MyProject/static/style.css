@@ -9,6 +9,7 @@ body {
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
+  font-family: Calibri;
 }
 
 .background-img {
@@ -34,6 +35,10 @@ th, td {
   border-collapse: collapse;
   text-align: center;
   padding: 1px;
+}
+
+th {
+    background-color: rgba(0,0,0,0.09);
 }
 
 .banner-area {
@@ -97,6 +102,19 @@ th, td {
 .edit-btn:hover,
 .edit-btn:focus {
     background-color: rgba(255, 174, 0, 0.4);
+    text-decoration: underline;
+}
+
+.add-btn {
+    background-color: rgba(85, 255, 85, 0.2);
+    display: block;
+    color: black;
+    text-decoration: none;
+}
+
+.add-btn:hover,
+.add-btn:focus {
+    background-color: rgba(85, 255, 85, 0.4);
     text-decoration: underline;
 }
 
@@ -202,9 +220,10 @@ th, td {
     height: 31px;
     font-weight: bold;
     background-color: rgba(255, 0, 0, 0.15);
-    font-size: 15px;
+    font-size: 18px;
     position: fixed;
     bottom: 65px;
+    font-family: Calibri;
 }
 
 .lo-btn:hover,
@@ -274,3 +293,13 @@ th, td {
     margin: 0px;
     font-size: 13px
 }
+
+.hidden-table,
+.hidden-table td {
+    border: 0px;
+    border-collapse: collapse;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+

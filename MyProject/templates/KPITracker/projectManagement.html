@@ -15,12 +15,18 @@
 
         <table class="content-table">
             <thead>
-                <th>Id</th>
-                <th>Project Name</th>
-                <th>Lead Testers</th>
-                <th>Testers</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <tr>
+                    <th colspan="7" style="background-color: rgba(0,0,0,0.2)">Manage Your Projects</th>
+                </tr>
+                <tr>
+                    <th>Id</th>
+                    <th>Project Name</th>
+                    <th>Lead Testers</th>
+                    <th>Testers</th>
+                    <th>Started</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
             </thead>
             <tbody>
                 {% for item in projects %}
@@ -28,10 +34,41 @@
                         <tr>
                             <td>{{ item.id }}</td>
                             <td>{{ item.project_name }}</td>
-                            <td></td>
-                            <td></td>
-                            <td>{{ item.status }}</td>
-                            <td></td>
+                            <td>
+                                <select class="add-box" style="text-align: center">
+                                    <option>
+                                        -- Lead Tester List --
+                                    </option>
+                                    {% for user in users %}
+                                        {% if user.user_type == "Lead Tester" and user.on_project == item.project_name %}
+                                            <option>
+                                                {{ user.first_name }} {{ user.last_name }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <select  class="add-box" style="text-align: center">
+                                    <option>
+                                        -- Tester List --
+                                    </option>
+                                    {% for user in users %}
+                                        {% if user.user_type == "Tester" and user.on_project == item.project_name %}
+                                            <option>
+                                                {{ user.first_name }} {{ user.last_name }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>{{ item.start_date }}</td>
+                            <td>{{ item.project_activity }}</td>
+                            <td style="padding: 0px">
+                                <a class="edit-btn" href="{% url 'KPIndustry:manage-project' item.id %}" style="border: 1px solid rgba(255, 174, 0, 0)">
+                                    Edit
+                                </a>
+                            </td>
                         </tr>
                     {% endif %}
                 {% endfor %}

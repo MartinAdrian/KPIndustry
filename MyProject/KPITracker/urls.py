@@ -17,4 +17,7 @@ urlpatterns = [
     path("<int:pk>/reactivate/", views.reactivate_user, name="reactivate-user"),
     path("<int:pk>/reopen/", views.reopen_project, name="reopen-project"),
     path("view-projects/", views.ViewProjects.as_view(), name="view-projects"),
+    path("<int:pk>/manage/", views.ManageProject.as_view(), name="manage-project"),
+    path("<int:pId>/manage/<int:lId>/lt-add/", views.add_lead_to_project, name="lead-add-project"),
+    path("<int:pId>/manage/<int:lId>/lt-rem/", views.rem_lead_to_project, name="lead-rem-project"),
 ]

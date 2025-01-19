@@ -3,7 +3,8 @@ import datetime
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, CreateView, UpdateView
+from django.http import HttpResponseRedirect
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.apps import apps
@@ -85,6 +86,16 @@ class UpdateUserView(LoginRequiredMixin, UpdateView):
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        projects = str(Projects.objects.values_list("project_manager", flat=True))
+        projects = projects[projects.find("[")+1:projects.find("]")].split(",")
+        fName = self.get_object().first_name
+        lName = self.get_object().last_name
+        for item in projects:
+            if fName in item and lName in item:
+                context["has_project"] = True
+        if self.get_object().on_project != "None":
+            context["is_taken"] = True
+
         return context
 
     def get_success_url(self):
@@ -137,3 +148,39 @@ class ViewProjects(LoginRequiredMixin, ListView):
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
         return context
+
+
+class ManageProject(LoginRequiredMixin, DetailView):
+
+    model = Projects
+    template_name = "KPITracker/manageProject.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["objects"] = self.model.objects.all()
+        context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        return context
+
+    def get_success_url(self, request):
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+
+@login_required
+def add_lead_to_project(request, lId, pId):
+
+    # print(lId, "   ",pId)
+    project_name = str(Projects.objects.filter(id=pId).values_list("project_name", flat=True))
+    project_name = project_name[project_name.find("'")+1:]
+    project_name = project_name[:project_name.find("'")]
+    # print(project_name)
+    UserList.objects.filter(id=lId).update(on_project=project_name)
+
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+@login_required
+def rem_lead_to_project(request, lId, pId):
+
+    UserList.objects.filter(id=lId).update(on_project="None")
+
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
