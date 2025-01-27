@@ -6,7 +6,7 @@ app_name = "KPIndustry"
 
 urlpatterns = [
     path("", include("django.contrib.auth.urls"), {"next_page": "/"}, name="login"),
-    path("", LoginView.as_view(template_name="registration/login.html"), name="login"),
+    path("", LoginView.as_view(template_name="registration/login.html", redirect_authenticated_user=True), name="login"),
     path("home/", views.HomeView.as_view(), name="homepage"),
     path("manage-users/", views.CreateUserView.as_view(), name="manage-users"),
     path("manage-users/<int:pk>/update/", views.UpdateUserView.as_view(), name="update-user"),
@@ -18,6 +18,7 @@ urlpatterns = [
     path("<int:pk>/reopen/", views.reopen_project, name="reopen-project"),
     path("view-projects/", views.ViewProjects.as_view(), name="view-projects"),
     path("<int:pk>/manage/", views.ManageProject.as_view(), name="manage-project"),
-    path("<int:pId>/manage/<int:lId>/lt-add/", views.add_lead_to_project, name="lead-add-project"),
-    path("<int:pId>/manage/<int:lId>/lt-rem/", views.rem_lead_to_project, name="lead-rem-project"),
+    path("<int:pId>/manage/<int:lId>/user-add/", views.add_user_to_project, name="user-add-project"),
+    path("<int:pId>/manage/<int:lId>/user-rem/", views.rem_user_from_project, name="user-rem-project"),
+    path("<int:pk>/manage/edit-desc/", views.EditDesc.as_view(), name="edit-desc-project"),
 ]

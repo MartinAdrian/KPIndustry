@@ -1,8 +1,13 @@
 import datetime
+import string
+import random
 
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.core.mail import EmailMultiAlternatives
 from django.db import models
+from django.template.loader import render_to_string
+from django.views.generic.base import ContextMixin
 
 
 class Projects(models.Model):
@@ -15,13 +20,13 @@ class Projects(models.Model):
     end_date=models.DateTimeField(null=True)
     reopened=models.BooleanField(default=False)
     active = models.BooleanField("Ongoing")
+    description = models.TextField("Project Description", max_length=2000, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if self.project_activity is None and self.active == False:
-            self.active = False
+        if not self.start_date and not self.end_date:
             self.project_activity = "Not Started"
             super(Projects, self).save(*args, **kwargs)
-        elif self.project_activity == "Ongoing" and self.active == False:
+        elif self.start_date and self.end_date:
             self.project_activity = "Finished"
             super(Projects, self).save(*args, **kwargs)
         else:
@@ -39,13 +44,6 @@ class UserList(User):
 
     user_type = models.CharField("User Type", max_length=100)
     on_project = models.CharField("Assigned Project", max_length=100, default="None")
-
-    def save(self, *args, **kwargs):
-        if not "sha" in self.password:
-            self.password = make_password(self.password)
-            super(UserList, self).save(*args, **kwargs)
-        else:
-            super(UserList, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}:\neMail: {self.email}\nType: {self.user_type}"
