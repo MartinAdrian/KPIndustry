@@ -18,7 +18,6 @@ class Projects(models.Model):
     project_activity = models.CharField("Project Activity", max_length=100, null=True)
     start_date=models.DateTimeField(null=True)
     end_date=models.DateTimeField(null=True)
-    reopened=models.BooleanField(default=False)
     active = models.BooleanField("Ongoing")
     description = models.TextField("Project Description", max_length=2000, blank=True, null=True)
 
@@ -28,6 +27,7 @@ class Projects(models.Model):
             super(Projects, self).save(*args, **kwargs)
         elif self.start_date and self.end_date:
             self.project_activity = "Finished"
+            self.active = False
             super(Projects, self).save(*args, **kwargs)
         else:
             self.project_activity = "Ongoing"
@@ -44,6 +44,7 @@ class UserList(User):
 
     user_type = models.CharField("User Type", max_length=100)
     on_project = models.CharField("Assigned Project", max_length=100, default="None")
+    gross_salary = models.CharField("Gross Salary", max_length=100, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}:\neMail: {self.email}\nType: {self.user_type}"

@@ -15,10 +15,11 @@ urlpatterns = [
     path("<int:pk>/deactivate/", views.deactivate_user, name="deactivate-user"),
     path("<int:pk>/finish/", views.finish_project, name="finish-project"),
     path("<int:pk>/reactivate/", views.reactivate_user, name="reactivate-user"),
-    path("<int:pk>/reopen/", views.reopen_project, name="reopen-project"),
+    path("<int:pk>/reopen/", views.start_project, name="start-project"),
     path("view-projects/", views.ViewProjects.as_view(), name="view-projects"),
     path("<int:pk>/manage/", views.ManageProject.as_view(), name="manage-project"),
     path("<int:pId>/manage/<int:lId>/user-add/", views.add_user_to_project, name="user-add-project"),
     path("<int:pId>/manage/<int:lId>/user-rem/", views.rem_user_from_project, name="user-rem-project"),
     path("<int:pk>/manage/edit-desc/", views.EditDesc.as_view(), name="edit-desc-project"),
+    path("<int:pk>/personal/", views.PersonalInfoView.as_view(), name="pers-view"),
 ]

@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content2 %}
-    <table class="content-table" style="height: 770px; max-height: 770px; min-height: 770px">
+    <table class="content-table full">
         <tr>
             <th colspan="8" style="font-size:25px">
                 {{ object.project_name }}
@@ -39,20 +39,22 @@
             <td>{{object.project_partner}}</td>
             <td>{{object.project_manager}}</td>
             <td rowspan="6" class="adding-cell">
-                <table class="hidden-table">
-                    {% for user in users %}
-                        {% if user.user_type == "Lead Tester" and user.on_project == "None" %}
-                            <tr>
-                                <td>
-                                    <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
-                                </td>
-                                <td>
-                                    <a class="add-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-add-project' object.id user.id %}">></a>
-                                </td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </table>
+                <div class="proj-add-rem-cell">
+                    <table class="hidden-table">
+                        {% for user in users %}
+                            {% if user.user_type == "Lead Tester" and user.on_project == "None" %}
+                                <tr>
+                                    <td>
+                                        <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
+                                    </td>
+                                    <td>
+                                        <a class="add-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-add-project' object.id user.id %}">></a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
             </td>
             <td rowspan="6" class="adding-cell">
                 <table class="hidden-table">
@@ -87,20 +89,22 @@
                 </table>
             </td>
             <td rowspan="6" class="adding-cell">
-                <table class="hidden-table">
-                    {% for user in users %}
-                        {% if user.user_type == "Tester" and user.on_project == object.project_name %}
-                            <tr>
-                                <td style="width: 1px">
-                                    <a class="deactivate-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-rem-project' object.id user.id %}"><</a>
-                                </td>
-                                <td>
-                                    <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
-                                </td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </table>
+                <div class="proj-add-rem-cell">
+                    <table class="hidden-table">
+                        {% for user in users %}
+                            {% if user.user_type == "Tester" and user.on_project == object.project_name %}
+                                <tr>
+                                    <td style="width: 1px">
+                                        <a class="deactivate-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-rem-project' object.id user.id %}"><</a>
+                                    </td>
+                                    <td>
+                                        <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
             </td>
         </tr>
         <tr style="height: 30px">

@@ -48,8 +48,8 @@
         <a style="text-decoration: none" href="">
           <p class="menu-btn">Button 4</p>
         </a>
-        <a style="text-decoration: none" href="">
-          <p class="menu-btn">Button 5</p>
+        <a style="text-decoration: none" href="{% url 'KPIndustry:pers-view' request.user.id %}">
+          <p class="menu-btn">Personal Info</p>
         </a>
         {% if request.user.is_superuser == True %}
           <a style="text-decoration: none" href="{% url 'admin:index' %}">

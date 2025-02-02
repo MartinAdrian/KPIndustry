@@ -60,80 +60,82 @@
     </table>
   </form>
   <div style="height: 5px"></div>
-  <table class="content-table">
-    <tr>
-      <th colspan="9" style="background-color: rgba(0,0,0,0.2)">
-        Manage Database
-      </th>
-    </tr>
-    <tr>
-      <th>Index</th>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>eMail</th>
-      <th>Username</th>
-      <th>User Type</th>
-      <th>On Project/s</th>
-      <th>Active</th>
-      <th>Action</th>
-    </tr>
-    <tbody>
-      {% for item in objects %}
-        <tr style="height: 42px">
-          <td>{{item.id}}</td>
-          <td>{{item.first_name}}</td>
-          <td>{{item.last_name}}</td>
-          <td>{{item.email}}</td>
-          <td>{{item.username}}</td>
-          <td>{{item.user_type}}</td>
-          <td>
-            {% if item.user_type == "Project Manager" %}
-              <select class="add-box" style="text-align: center">
-                <option>-- Projects list --</option>
-                {% for project in projects %}
-                  {% if item.first_name in project.project_manager and item.last_name in project.project_manager %}
-                    <option>{{ project.project_name }}</option>
-                  {% endif %}
-                {% endfor %}
-              </select>
-            {% else %}
-              {{ item.on_project }}
-            {% endif %}
-          </td>
-          <td>{{item.is_active}}</td>
-          <td style="max-width: 75px; width: 75px">
-            {% if item.first_name != request.user.first_name %}
-              {% if form.first_name.value in item.first_name and form.last_name.value in item.last_name %}
-                <p class="action-err-txt">Current</p>
-                <p class="action-err-txt">Edit</p>
+  <div class="user-overflow">
+    <table class="content-table">
+      <tr>
+        <th colspan="9" style="background-color: rgba(0,0,0,0.2)">
+          Manage Database
+        </th>
+      </tr>
+      <tr>
+        <th>Index</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>eMail</th>
+        <th>Username</th>
+        <th>User Type</th>
+        <th>On Project/s</th>
+        <th>Active</th>
+        <th>Action</th>
+      </tr>
+      <tbody>
+        {% for item in objects %}
+          <tr style="height: 42px">
+            <td>{{item.id}}</td>
+            <td>{{item.first_name}}</td>
+            <td>{{item.last_name}}</td>
+            <td>{{item.email}}</td>
+            <td>{{item.username}}</td>
+            <td>{{item.user_type}}</td>
+            <td>
+              {% if item.user_type == "Project Manager" %}
+                <select class="add-box" style="text-align: center">
+                  <option>-- Projects list --</option>
+                  {% for project in projects %}
+                    {% if item.first_name in project.project_manager and item.last_name in project.project_manager %}
+                      <option>{{ project.project_name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
               {% else %}
-                <table class="custom-table" style="border-collapse: collapse; width: 100%">
-                  <tr>
-                    <td style="padding: 0px">
-                      <a class="edit-btn" href="{% url 'KPIndustry:update-user' item.id %}">
-                        Edit
-                      </a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 0px">
-                      {% if item.is_active == True %}
-                      <a class="deactivate-btn" href="{% url 'KPIndustry:deactivate-user' item.id %}">Deactivate</a>
-                      {% else %}
-                      <a class="reactivate-btn" href="{% url 'KPIndustry:reactivate-user' item.id %}">Reactivate</a>
-                      {% endif %}
-                    </td>
-                  </tr>
-                </table>
+                {{ item.on_project }}
               {% endif %}
-            {% else %}
-              <p class="action-err-txt">Current</p>
-              <p class="action-err-txt">Login</p>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+            </td>
+            <td>{{item.is_active}}</td>
+            <td style="max-width: 75px; width: 75px">
+              {% if item.first_name != request.user.first_name %}
+                {% if form.first_name.value in item.first_name and form.last_name.value in item.last_name %}
+                  <p class="action-err-txt">Current</p>
+                  <p class="action-err-txt">Edit</p>
+                {% else %}
+                  <table class="custom-table" style="border-collapse: collapse; width: 100%">
+                    <tr>
+                      <td style="padding: 0px">
+                        <a class="edit-btn" href="{% url 'KPIndustry:update-user' item.id %}">
+                          Edit
+                        </a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 0px">
+                        {% if item.is_active == True %}
+                        <a class="deactivate-btn" href="{% url 'KPIndustry:deactivate-user' item.id %}">Deactivate</a>
+                        {% else %}
+                        <a class="reactivate-btn" href="{% url 'KPIndustry:reactivate-user' item.id %}">Reactivate</a>
+                        {% endif %}
+                      </td>
+                    </tr>
+                  </table>
+                {% endif %}
+              {% else %}
+                <p class="action-err-txt">Current</p>
+                <p class="action-err-txt">Login</p>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
 {% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'homepage.html' %}
+{% load static %}
+{% block logo %}
+  <a href="{% url 'KPIndustry:homepage' %}"><img src="{% static 'Logo.png' %}" height="100"></a>
+{% endblock %}
+
+{% block banner2 %}
+  {% if request.user.is_authenticated %}
+      <p style="margin:0px; text-align: center">Logged in as:</p>
+      <p style="margin: 0px; font-weight: bold; text-align: center">{{ request.user.first_name }} {{ request.user.last_name }}</p>
+  {% endif %}
+{% endblock %}
+
+{% block content2 %}
+    <table class="content-table full">
+        <tr>
+            <th style="height: 2px; font-size: 27px" colspan="20">Personal Information</th>
+        </tr>
+        <tr>
+            <td style="width: 5%" rowspan="2">Photo</td>
+            <th style="height: 40px; width: 2px">Name</th>
+            <td style="width: 200px">{{object.last_name}}</td>
+            <th style="height: 2px; width: 140px">Position</th>
+            <td style="width: 150px">{{object.user_type}}</td>
+            <td rowspan="3" style="width: 1200px"></td>
+        </tr>
+        <tr>
+            <th style="height: 40px; width: 2px">Surname</th>
+            <td>{{object.first_name}}</td>
+            <th>Allocated Project</th>
+            <td>
+                {% if object.user_type != "Tester" or object.user_type != "Lead Tester" %}
+                    Not Applicable
+                {% else %}
+                    {{object.on_project}}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="20" style="width: 20px"></td>
+        </tr>
+    </table>
+{% endblock %}

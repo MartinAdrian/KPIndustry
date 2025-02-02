@@ -56,134 +56,136 @@
     </table>
   </form>
   <div style="height: 5px"></div>
-  <table class="content-table">
-    <tr>
-      <th colspan="10" style="background-color: rgba(0,0,0,0.2)">
-        Manage Database
-      </th>
-    </tr>
-    <tr>
-      <th style="width: 20px">
-        Id
-      </th>
-      <th>
-        Project Name
-      </th>
-      <th>
-        Project Partner
-      </th>
-      <th>
-        Project Manager
-      </th>
-      <th>
-        Lead Testers
-      </th>
-      <th>
-        Testers
-      </th>
-      <th>
-        Start Date
-      </th>
-      <th>
-        Ongoing
-      </th>
-      <th>
-        End Date
-      </th>
-      <th>
-        Action
-      </th>
-    </tr>
-    <tbody>
-      {% for item in projects %}
-        <tr>
-          <td>
-            {{item.id}}
-          </td>
-          <td>
-            {{item.project_name}}
-          </td>
-          <td>
-            {{ item.project_partner }}
-          </td>
-          <td>
-            {{item.project_manager}}
-          </td>
-          <td>
-            <select class="add-box" style="text-align: center">
-              <option>
-                -- Lead Tester List --
-              </option>
-              {% for user in users %}
-                {% if user.user_type == "Lead Tester" %}
-                  {% if user.on_project == item.project_name %}
-                    <option>{{ user.first_name }} {{ user.last_name }}</option>
+  <div class="user-overflow">
+    <table class="content-table">
+      <tr>
+        <th colspan="10" style="background-color: rgba(0,0,0,0.2)">
+          Manage Database
+        </th>
+      </tr>
+      <tr>
+        <th style="width: 20px">
+          Id
+        </th>
+        <th>
+          Project Name
+        </th>
+        <th>
+          Project Partner
+        </th>
+        <th>
+          Project Manager
+        </th>
+        <th>
+          Lead Testers
+        </th>
+        <th>
+          Testers
+        </th>
+        <th>
+          Start Date
+        </th>
+        <th>
+          Ongoing
+        </th>
+        <th>
+          End Date
+        </th>
+        <th>
+          Action
+        </th>
+      </tr>
+      <tbody>
+        {% for item in projects %}
+          <tr>
+            <td>
+              {{item.id}}
+            </td>
+            <td>
+              {{item.project_name}}
+            </td>
+            <td>
+              {{ item.project_partner }}
+            </td>
+            <td>
+              {{item.project_manager}}
+            </td>
+            <td>
+              <select class="add-box" style="text-align: center">
+                <option>
+                  -- Lead Tester List --
+                </option>
+                {% for user in users %}
+                  {% if user.user_type == "Lead Tester" %}
+                    {% if user.on_project == item.project_name %}
+                      <option>{{ user.first_name }} {{ user.last_name }}</option>
+                    {% endif %}
                   {% endif %}
-                {% endif %}
-              {% endfor %}
-            </select>
-          </td>
-          <td>
-            <select class="add-box" style="text-align: center">
-              <option>
-                -- Tester List --
-              </option>
-              {% for user in users %}
-                {% if user.user_type == "Tester" %}
-                  {% if user.on_project == item.project_name %}
-                    <option>{{ user.first_name }} {{ user.last_name }}</option>
+                {% endfor %}
+              </select>
+            </td>
+            <td>
+              <select class="add-box" style="text-align: center">
+                <option>
+                  -- Tester List --
+                </option>
+                {% for user in users %}
+                  {% if user.user_type == "Tester" %}
+                    {% if user.on_project == item.project_name %}
+                      <option>{{ user.first_name }} {{ user.last_name }}</option>
+                    {% endif %}
                   {% endif %}
-                {% endif %}
-              {% endfor %}
-            </select>
-          </td>
-          <td>
-            {% if item.start_date == None %}
-              N/A
-            {% else %}
-              {{ item.start_date }}
-            {% endif %}
-          </td>
-          <td>
-            {{ item.project_activity }}
-          </td>
-          <td>
-            {% if item.end_date == None %}
-              N/A
-            {% else %}
-              {{ item.end_date }}
-            {% endif %}
-          </td>
-          <td style="max-width: 75px; width: 75px">
-            {% if item.end_date != None %}
-              <p class="action-err-txt">Ended</p>
-            {% else %}
-              <table class="custom-table" style="border-collapse: collapse; width: 100%">
+                {% endfor %}
+              </select>
+            </td>
+            <td>
+              {% if item.start_date == None %}
+                N/A
+              {% else %}
+                {{ item.start_date }}
+              {% endif %}
+            </td>
+            <td>
+              {{ item.project_activity }}
+            </td>
+            <td>
+              {% if item.end_date == None %}
+                N/A
+              {% else %}
+                {{ item.end_date }}
+              {% endif %}
+            </td>
+            <td style="max-width: 75px; width: 75px">
+              {% if item.end_date != None %}
+                <p class="action-err-txt">Ended</p>
+              {% else %}
+                <table class="custom-table" style="border-collapse: collapse; width: 100%">
 
+                    <tr style="height: 100%">
+                      <td style="padding: 0px">
+                        <a class="edit-btn" href="{% url 'KPIndustry:update-project' item.id %}">Edit</a>
+                      </td>
+                    </tr>
                   <tr style="height: 100%">
                     <td style="padding: 0px">
-                      <a class="edit-btn" href="{% url 'KPIndustry:update-project' item.id %}">Edit</a>
+                      {% if item.start_date != None %}
+                      <a class="deactivate-btn" href="{% url 'KPIndustry:finish-project' item.id %}">
+                        Finish
+                      </a>
+                      {% else %}
+                      <a class="reactivate-btn" href="{% url 'KPIndustry:start-project' item.id %}">
+                        Start
+                      </a>
+                      {% endif %}
                     </td>
                   </tr>
-                <tr style="height: 100%">
-                  <td style="padding: 0px">
-                    {% if item.active == True %}
-                    <a class="deactivate-btn" href="{% url 'KPIndustry:finish-project' item.id %}">
-                      Finish
-                    </a>
-                    {% else %}
-                    <a class="reactivate-btn" href="{% url 'KPIndustry:reopen-project' item.id %}">
-                      Start
-                    </a>
-                    {% endif %}
-                  </td>
-                </tr>
-              </table>
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+                </table>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 
 {% endblock %}
