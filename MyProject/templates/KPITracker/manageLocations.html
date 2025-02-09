@@ -1,0 +1,16 @@
+{% extends 'homepage.html' %}
+{% load static %}
+{% block logo %}
+  <a href="{% url 'KPIndustry:homepage' %}"><img src="{% static 'Logo.png' %}" height="100"></a>
+{% endblock %}
+
+{% block banner2 %}
+  {% if request.user.is_authenticated %}
+      <p style="margin:0px; text-align: center">Logged in as:</p>
+      <p style="margin: 0px; font-weight: bold; text-align: center">{{ request.user.first_name }} {{ request.user.last_name }}</p>
+  {% endif %}
+{% endblock %}
+
+{% block content2 %}
+
+{% endblock %}

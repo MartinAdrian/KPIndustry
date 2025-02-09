@@ -45,9 +45,15 @@
                 {% endif %}
             {% endif %}
         {% endfor %}
-        <a style="text-decoration: none" href="">
-          <p class="menu-btn">Button 4</p>
-        </a>
+        {% for item in users %}
+            {% if item.id == request.user.id %}
+                {% if item.user_type == "Administrator" %}
+                    <a style="text-decoration: none" href="{% url 'KPIndustry:manage-locations' %}">
+                      <p class="menu-btn">Manage Locations</p>
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
         <a style="text-decoration: none" href="{% url 'KPIndustry:pers-view' request.user.id %}">
           <p class="menu-btn">Personal Info</p>
         </a>

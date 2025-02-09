@@ -22,4 +22,5 @@ urlpatterns = [
     path("<int:pId>/manage/<int:lId>/user-rem/", views.rem_user_from_project, name="user-rem-project"),
     path("<int:pk>/manage/edit-desc/", views.EditDesc.as_view(), name="edit-desc-project"),
     path("<int:pk>/personal/", views.PersonalInfoView.as_view(), name="pers-view"),
+    path("manage-locations", views.ManageLocations.as_view(), name="manage-locations")
 ]

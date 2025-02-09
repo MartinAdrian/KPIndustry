@@ -225,3 +225,17 @@ class PersonalInfoView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         return context
+
+
+class ManageLocations(LoginRequiredMixin, CreateView):
+    model = LocationsRegistered
+    template_name = "KPITracker/manageLocations.html"
+    fields = ["name", "country", "region", "city", "street", "number", "zipcode", "lat", "lon"]
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["objects"] = self.model.objects.all()
+        context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        return context

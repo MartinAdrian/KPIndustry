@@ -45,6 +45,23 @@ class UserList(User):
     user_type = models.CharField("User Type", max_length=100)
     on_project = models.CharField("Assigned Project", max_length=100, default="None")
     gross_salary = models.CharField("Gross Salary", max_length=100, null=True)
+    phone_number = models.IntegerField("Phone Number", null=True)
+    work_location = models.CharField("Work Location", null=True, max_length=200)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}:\neMail: {self.email}\nType: {self.user_type}"
+
+
+class LocationsRegistered(models.Model):
+    name = models.CharField("Location Name", null=True, max_length=200)
+    lat = models.CharField("Latitude", null=True, max_length=200)
+    lon = models.CharField("Longitude", null=True, max_length=200)
+    country = models.CharField("Country", null=True, max_length=200)
+    region = models.CharField("Region", null=True, max_length=200)
+    city = models.CharField("City", null=True, max_length=200)
+    street = models.CharField("Street", null=True, max_length=200)
+    number = models.CharField("Number", null=True, max_length=200)
+    zipcode = models.IntegerField("Number", null=True)
+
+    def __str__(self):
+        return f"{self.country}, {self.region}, {self.city}, {self.street}, {self.number}, {self.zipcode}"
