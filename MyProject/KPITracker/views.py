@@ -1,5 +1,7 @@
 import datetime
 
+import requests
+from bs4 import BeautifulSoup
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,6 +12,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.apps import apps
+from .forms import AddUserForm
 from .models import *
 
 
@@ -28,19 +31,54 @@ class HomeView(LoginRequiredMixin, ListView):
 class CreateUserView(LoginRequiredMixin, CreateView):
 
     model = UserList
-    fields = ["first_name", "last_name", "email", "username", "user_type"]
-    template_name = "KPITracker/userIndex.html"
-
     def get_context_data(self, **kwargs):
+        req = requests.get("https://countrycode.org/")
+        link = BeautifulSoup(req.text, features="html.parser")
+        main = link.find_all("table")
+        values = list()
+        codes = list()
+        for obj in main:
+            for tr in obj.find_all("tr"):
+                for td in tr.find_all("td"):
+                    if td.get_text():
+                        values.append(td.get_text())
+                    else:
+                        values.append("empty")
+            break
+        for num in range(1, len(values) + 1, 6):
+            codes.append(values[num])
+
+        to_delete = list()
+        for num, code in enumerate(codes):
+            multiple = False
+            for char in code:
+                if char == ",":
+                    multiple = True
+                    break
+            if multiple:
+                code = list(code.split(","))
+                for item in code:
+                    codes.append(item.strip())
+                to_delete.append(num)
+        for num in to_delete:
+            codes.pop(num)
+        codes = list(set(codes))
+        codes.sort()
         context = super().get_context_data(**kwargs)
         context["objects"] = self.model.objects.all()
         context["users"] = self.model.objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
         return context
 
+    form_class = AddUserForm
+    template_name = "KPITracker/userIndex.html"
+
+
+
+
     def get_success_url(self):
         password = "".join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits + "!@#$%&*") for _ in range(12))
-        user_instance = User.objects.get(id=self.object.id)
+        user_instance = UserList.objects.get(id=self.object.id)
         user_instance.set_password(password)
         user_instance.save()
         content = (f"Please remember you KPIndustry credentials: \n"

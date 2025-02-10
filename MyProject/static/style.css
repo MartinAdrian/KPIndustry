@@ -319,7 +319,6 @@ th {
     height: calc(100% - 255px);
     padding: 0px;
     margin: 0px;
-    cursor: pointer;
 }
 
 .menu-btns:not(:last-child) {

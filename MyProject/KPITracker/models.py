@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
 from django.db import models
+from django.db.models import CharField
 from django.template.loader import render_to_string
 from django.views.generic.base import ContextMixin
 

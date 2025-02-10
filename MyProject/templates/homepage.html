@@ -15,9 +15,24 @@
   <div style="padding-top: 5px; height: calc(100% - 5px); width: calc(100% - 20px - 200px)">
     <div class="content-area">
       {% block content2 %}
-        <h1 style="width: 100%; text-align: center">KPI Tracker made by Adrian Martin</h1>
-        <h2>Manage Users:</h2>
-        <p>The main control panel for managing users</p>
+        {% for item in users %}
+            {% if item.id == request.user.id %}
+                {% if item.user_type == "Administrator" %}
+                    <h1 style="text-align: center; width: 100%">KPI Tracker made by Adrian Martin</h1>
+                    <h3>Manage Users</h3>
+                    <p style="margin-left: 15px">You are able to add, remove or change employees data.</p>
+                    <p style="margin-left: 15px">It's also a place to see every persons information, such as:</p>
+                    <p style="margin-left: 25px">- First Name</p>
+                    <p style="margin-left: 25px">- Last Name</p>
+                    <p style="margin-left: 25px">- eMail</p>
+                    <p style="margin-left: 25px">- Username</p>
+                    <p style="margin-left: 25px">- User type</p>
+                    <p style="margin-left: 25px">- What project/s the person is assigned to</pv>
+                    <p style="margin-left: 25px">- If they are active or not</p>
+                    <p style="margin-left: 15px"></p>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
       {% endblock %}
     </div>
   </div>
