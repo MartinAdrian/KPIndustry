@@ -4,6 +4,12 @@
   <a href="{% url 'KPIndustry:homepage' %}"><img src="{% static 'Logo.png' %}" height="100"></a>
 {% endblock %}
 
+{% block head %}
+    <link rel="stylesheet" href="https://tiles.locationiq.com/v3/libs/openlayers/8.2.0/ol.css" type="text/css">
+    <script src="https://tiles.locationiq.com/v3/libs/openlayers/8.2.0/ol.js"></script>
+    <script src="https://tiles.locationiq.com/v3/libs/olms/12.0.0/olms.js" type="text/javascript"></script>
+{% endblock %}
+
 {% block banner2 %}
   {% if request.user.is_authenticated %}
       <p style="margin:0px; text-align: center">Logged in as:</p>
@@ -12,5 +18,102 @@
 {% endblock %}
 
 {% block content2 %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table class="content-table">
+            <tr style="height:30px">
+                <th colspan="3">Add Location To Database</th>
+                <td rowspan="99" style="width: 768px">
+                    <script type="text/javascript">
+                        var key = 'pk.aa7f5d0539c5675b7f3429402939d8fa';   //Insert your LocationIQ access token here
 
+                        var styleJson = 'https://tiles-staging.locationiq.com/v3/streets/vector.json?key=' + key;
+
+                        const map = new ol.Map({
+                            target: 'map',
+                            view: new ol.View({
+                                center: ol.proj.fromLonLat([24.74796624329303, 45.76116953220859]),
+                                zoom: 5
+                            })
+                        });
+
+                        olms.apply(map, styleJson);
+                    </script>
+                    <div id="map"></div>
+                </td>
+            </tr>
+            <tr style="height: 30px">
+                <th style="width: 33%; max-width: 33%">Location Name</th>
+                <th style="width: 33%; max-width: 33%">Latitude</th>
+                <th style="width: 33%; max-width: 33%">Longitude</th>
+            </tr>
+            <tr style="mex-height: 1px">
+                <td>
+                    <input class="form-control add-box" name="name" required>
+                </td>
+                <td><textarea class="form-control add-box latlon-area" name="lat" id="lat" placeholder="Press Search to get Latitude"></textarea></td>
+                <td><textarea class="form-control add-box latlon-area" name="lon" id="lon"  placeholder="Press Search to get Longitude"></textarea></td>
+            </tr>
+            <tr style="height: 30px">
+                <th>Country</th>
+                <th>Region</th>
+                <th>City</th>
+            </tr>
+            <tr style="height: 1px">
+                <td>
+                    <input class="form-control add-box" name="country" required>
+                </td>
+                <td>
+                    <input class="form-control add-box" name="region" required>
+                </td>
+                <td>
+                    <input class="form-control add-box" name="city" required>
+                </td>
+            </tr>
+            <tr style="height: 30px">
+                <th>Street</th>
+                <th>Address Number</th>
+                <th>Zip Code</th>
+            </tr>
+            <tr style="height: 1px">
+                <td>
+                    <input class="form-control add-box" name="street" required>
+                </td>
+                <td>
+                    <input class="form-control add-box" name="number" required>
+                </td>
+                <td>
+                    <input class="form-control add-box" name="zipcode" required>
+                </td>
+            </tr>
+            <tr style="height: 30px">
+                <th colspan="3">Location Description or Indices</th>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <textarea class="form-control add-box proj-desc" style="width: calc(100% - 8px); height: 508px; resize: none" name="misc_description" required></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td style="display-style: block; height: 1px" colspan="3">
+                    <button class="inf-btn" style="margin-right: 125px" id="search_button" type="button">Search</button>
+                    <button class="succ-btn" type="submit">Add</button>
+                </td>
+            </tr>
+        </table>
+        <script>
+            var search_button = document.getElementById("search_button");
+            if (search_button.addEventListener)
+                search_button.addEventListener("click", changeText, false);
+            else if (search_button.attachEvent)
+                search_button.attachEvent("onclick", changeText);
+
+            function changeText(){
+                document.getElementById("lat").innerText = 45.76116953220859
+                document.getElementById("lat").value = 45.76116953220859
+                document.getElementById("lon").innerText = 24.74796624329303
+                document.getElementById("lon").value = 24.74796624329303
+            }
+        </script>
+    </form>
 {% endblock %}

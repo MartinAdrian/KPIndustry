@@ -6,56 +6,87 @@
     {% csrf_token %}
     <table class="content-table">
       <tr>
-        <th colspan="6" style="background-color: rgba(0,0,0,0.2)">
-          Edit Info
+        <th colspan="7" style="background-color: rgba(0,0,0,0.2)">
+          Add To Database
         </th>
       </tr>
       <tr>
-        {% for field in form %}
-          <th> {{ field.label }} </th>
-        {% endfor %}
-          <th>Action</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>eMail</th>
+        <th>Username</th>
+        <th>Action</th>
       </tr>
       <tr>
-        {% for field in form %}
-          {% if field.label == 'User Type' %}
-            <td>
-              {% if has_project %}
-                Unassign Projects
+        <td>
+            <input class="form-control add-box" name="first_name" value="{{form.first_name.value}}" required>
+        </td>
+        <td>
+          <input class="form-control add-box" name="last_name" value="{{form.last_name.value}}" required>
+        </td>
+        <td>
+          <input class="form-control add-box" name="email" value="{{form.email.value}}" required>
+        </td>
+        <td>
+          <input class="form-control add-box" name="username" value="{{form.username.value}}" required>
+        </td>
+        <td rowspan="3" style="width: 1px">
+          <button style="width: 70px; height: 40px" class="box-btn" type="submit">Modify</button>
+        </td>
+      </tr>
+      <tr>
+        <th>Phone Number</th>
+        <th>Work Location</th>
+        <th>Gross Salary</th>
+        <th>User Type</th>
+      </tr>
+      <tr>
+        <td>
+          <input class="form-control add-box" name="phone_number" type="text" inputmode="numeric" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" value="{{form.phone_number.value}}" required>
+        </td>
+        <td>
+          <select class="choose-box" name="work_location" required>
+            {% for location in work_locations %}
+              {% if location == form.work_location.value %}
+                <option value="{{location}}" selected>{{location}}</option>
               {% else %}
-                <select class="choose-box" name="user_type" style="width: calc(100% - 3px)" required>
-                  {% if field.value == "Tester" %}
-                    <option value="Tester" selected="selected">Tester</option>
-                  {% else %}
-                    <option value="Tester">Tester</option>
-                  {% endif %}
-                  {% if field.value == "Lead Tester" %}
-                    <option value="Lead Tester" selected="selected">Lead Tester</option>
-                  {% else %}
-                    <option value="Lead Tester">Lead Tester</option>
-                  {% endif %}
-                  {% if not is_taken %}
-                    {% if field.value == "Project Manager" %}
-                      <option value="Project Manager" selected="selected">Project Manager</option>
-                    {% else %}
-                      <option value="Project Manager">Project Manager</option>
-                    {% endif %}
-                    {% if field.value == "Administrator" %}
-                      <option value="Administrator" selected="selected">Administrator</option>
-                    {% else %}
-                      <option value="Administrator">Administrator</option>
-                    {% endif %}
-                  {% endif %}
-                </select>
+                <option value="{{location}}">{{location}}</option>
               {% endif %}
-            </td>
-          {% else %}
-            <td>
-              <input class="form-control add-box" type="text" name="{{ field.html_name }}" autocomplete="off" required value="{{ field.value }}">
-            </td>
-          {% endif %}
-        {% endfor %}
-          <td><button style="width: 50px" class="box-btn" type="submit">Modify</button></td>
+            {% endfor %}
+          </select>
+        </td>
+        <td>
+          <input class="add-box" name="gross_salary" value="{{form.gross_salary.value}}" required>
+        </td>
+        <td>
+          <select class="choose-box" name="user_type">
+            {% if form.user_type.value == "Administrator" %}
+              <option value="Administrator" selected>Administrator</option>
+            {% else %}
+              <option value="Administrator">Administrator</option>
+            {% endif %}
+            {% if form.user_type.value == "Accountant" %}
+              <option value="Accountant" selected>Accountant</option>
+            {% else %}
+              <option value="Accountant">Accountant</option>
+            {% endif %}
+            {% if form.user_type.value == "Project Manager" %}
+              <option value="Project Manager" selected>Project Manager</option>
+            {% else %}
+              <option value="Project Manager">Project Manager</option>
+            {% endif %}
+            {% if form.user_type.value == "Lead Tester" %}
+              <option value="Lead Tester" selected>Lead Tester</option>
+            {% else %}
+              <option value="Lead Tester">Lead Tester</option>
+            {% endif %}
+            {% if form.user_type.value == "Tester" %}
+              <option value="Tester" selected>Tester</option>
+            {% else %}
+              <option value="Tester">Tester</option>
+            {% endif %}
+          </select>
+        </td>
       </tr>
     </table>
   </form>
@@ -63,7 +94,7 @@
   <div class="user-overflow">
     <table class="content-table">
       <tr>
-        <th colspan="9" style="background-color: rgba(0,0,0,0.2)">
+        <th colspan="99" style="background-color: rgba(0,0,0,0.2)">
           Manage Database
         </th>
       </tr>
@@ -72,9 +103,11 @@
         <th>First Name</th>
         <th>Last Name</th>
         <th>eMail</th>
+        <th>Phone Number</th>
         <th>Username</th>
         <th>User Type</th>
         <th>On Project/s</th>
+        <th>Work Location</th>
         <th>Active</th>
         <th>Action</th>
       </tr>
@@ -85,6 +118,7 @@
             <td>{{item.first_name}}</td>
             <td>{{item.last_name}}</td>
             <td>{{item.email}}</td>
+            <td>{{item.phone_number}}</td>
             <td>{{item.username}}</td>
             <td>{{item.user_type}}</td>
             <td>
@@ -101,6 +135,7 @@
                 {{ item.on_project }}
               {% endif %}
             </td>
+            <td>{{item.work_location}}</td>
             <td>{{item.is_active}}</td>
             <td style="max-width: 75px; width: 75px">
               {% if item.first_name != request.user.first_name %}
@@ -114,15 +149,6 @@
                         <a class="edit-btn" href="{% url 'KPIndustry:update-user' item.id %}">
                           Edit
                         </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 0px">
-                        {% if item.is_active == True %}
-                        <a class="deactivate-btn" href="{% url 'KPIndustry:deactivate-user' item.id %}">Deactivate</a>
-                        {% else %}
-                        <a class="reactivate-btn" href="{% url 'KPIndustry:reactivate-user' item.id %}">Reactivate</a>
-                        {% endif %}
                       </td>
                     </tr>
                   </table>

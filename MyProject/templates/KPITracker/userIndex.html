@@ -1,7 +1,7 @@
 {% extends 'homepage.html' %}
 
-{% block content2 %}
 
+{% block content2 %}
   <form method="post">
     {% csrf_token %}
     <table class="content-table">
@@ -42,12 +42,26 @@
       </tr>
       <tr>
         <td>
-          <select class="choose-box" name="country_code">
-            {% for code in country_codes_list %}
-              <option value="{{code}}">{{code}}</option>
+          <input class="form-control add-box" name="phone_number" type="text" inputmode="numeric" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="xxx-xxx-xxxx" required>
+        </td>
+        <td>
+          <select class="choose-box" name="work_location" required>
+            {% for location in work_locations %}
+              <option value="{{location}}">{{location}}</option>
             {% endfor %}
           </select>
-          <input class="form-control add-box" name="phone_number" type="text" inputmode="numeric" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="+xxx-xxx-xxxx" required>
+        </td>
+        <td>
+          <input class="form-control add-box" name="gross_salary" required>
+        </td>
+        <td>
+          <select class="choose-box" name="user_type" required>
+            <option value="Administrator">Administrator</option>
+            <option value="Accountant">Accountant</option>
+            <option value="Project Manager">Project Manager</option>
+            <option value="Lead Tester">Lead Tester</option>
+            <option value="Tester">Tester</option>
+          </select>
         </td>
       </tr>
     </table>
@@ -56,7 +70,7 @@
   <div class="user-overflow">
     <table class="content-table">
       <tr>
-        <th colspan="9" style="background-color: rgba(0,0,0,0.2)">
+        <th colspan="99" style="background-color: rgba(0,0,0,0.2)">
           Manage Database
         </th>
       </tr>
@@ -65,9 +79,11 @@
         <th>First Name</th>
         <th>Last Name</th>
         <th>eMail</th>
+        <th>Phone Number</th>
         <th>Username</th>
         <th>User Type</th>
         <th>On Project/s</th>
+        <th>Work Location</th>
         <th>Active</th>
         <th>Action</th>
       </tr>
@@ -78,6 +94,7 @@
             <td>{{item.first_name}}</td>
             <td>{{item.last_name}}</td>
             <td>{{item.email}}</td>
+            <td>{{item.phone_number}}</td>
             <td>{{item.username}}</td>
             <td>{{item.user_type}}</td>
             <td>
@@ -94,6 +111,7 @@
                 {{ item.on_project }}
               {% endif %}
             </td>
+            <td>{{item.work_location}}</td>
             <td>{{item.is_active}}</td>
             <td style="max-width: 75px; width: 75px">
               {% if item.first_name != request.user.first_name %}

@@ -46,7 +46,7 @@ class UserList(User):
     user_type = models.CharField("User Type", max_length=100)
     on_project = models.CharField("Assigned Project", max_length=100, default="None")
     gross_salary = models.CharField("Gross Salary", max_length=100, null=True)
-    phone_number = models.IntegerField("Phone Number", null=True)
+    phone_number = models.CharField("Phone Number", null=True, max_length=20)
     work_location = models.CharField("Work Location", null=True, max_length=200)
 
     def __str__(self):
@@ -54,15 +54,13 @@ class UserList(User):
 
 
 class LocationsRegistered(models.Model):
-    name = models.CharField("Location Name", null=True, max_length=200)
-    lat = models.CharField("Latitude", null=True, max_length=200)
-    lon = models.CharField("Longitude", null=True, max_length=200)
-    country = models.CharField("Country", null=True, max_length=200)
-    region = models.CharField("Region", null=True, max_length=200)
-    city = models.CharField("City", null=True, max_length=200)
-    street = models.CharField("Street", null=True, max_length=200)
-    number = models.CharField("Number", null=True, max_length=200)
-    zipcode = models.IntegerField("Number", null=True)
-
-    def __str__(self):
-        return f"{self.country}, {self.region}, {self.city}, {self.street}, {self.number}, {self.zipcode}"
+    name = models.CharField("Location Name", max_length=200, unique=True)
+    lat = models.CharField("Latitude", max_length=200)
+    lon = models.CharField("Longitude", max_length=200)
+    country = models.CharField("Country", max_length=200)
+    region = models.CharField("Region", max_length=200)
+    city = models.CharField("City", max_length=200)
+    street = models.CharField("Street", max_length=200)
+    number = models.CharField("Number", max_length=200)
+    zipcode = models.IntegerField("Zip Code")
+    misc_description = models.CharField("Misc Description", null=True, max_length=800)

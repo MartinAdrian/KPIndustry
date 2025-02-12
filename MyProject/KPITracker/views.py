@@ -5,14 +5,14 @@ from bs4 import BeautifulSoup
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.template.base import kwarg_re
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.apps import apps
-from .forms import AddUserForm
 from .models import *
 
 
@@ -23,58 +23,24 @@ class HomeView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
         context["users"] = self.model.objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
         return context
-
 
 class CreateUserView(LoginRequiredMixin, CreateView):
 
     model = UserList
-    def get_context_data(self, **kwargs):
-        req = requests.get("https://countrycode.org/")
-        link = BeautifulSoup(req.text, features="html.parser")
-        main = link.find_all("table")
-        values = list()
-        codes = list()
-        for obj in main:
-            for tr in obj.find_all("tr"):
-                for td in tr.find_all("td"):
-                    if td.get_text():
-                        values.append(td.get_text())
-                    else:
-                        values.append("empty")
-            break
-        for num in range(1, len(values) + 1, 6):
-            codes.append(values[num])
+    template_name = "KPITracker/userIndex.html"
+    fields = ["first_name", "last_name", "email", "username", "user_type", "gross_salary", "phone_number", "work_location"]
 
-        to_delete = list()
-        for num, code in enumerate(codes):
-            multiple = False
-            for char in code:
-                if char == ",":
-                    multiple = True
-                    break
-            if multiple:
-                code = list(code.split(","))
-                for item in code:
-                    codes.append(item.strip())
-                to_delete.append(num)
-        for num in to_delete:
-            codes.pop(num)
-        codes = list(set(codes))
-        codes.sort()
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["work_locations"] = LocationsRegistered.objects.values_list("name",flat=True)
         context["objects"] = self.model.objects.all()
         context["users"] = self.model.objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
         return context
-
-    form_class = AddUserForm
-    template_name = "KPITracker/userIndex.html"
-
-
-
 
     def get_success_url(self):
         password = "".join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits + "!@#$%&*") for _ in range(12))
@@ -119,6 +85,7 @@ class CreateProjectsView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
@@ -131,11 +98,12 @@ class CreateProjectsView(LoginRequiredMixin, CreateView):
 class UpdateUserView(LoginRequiredMixin, UpdateView):
 
     model = UserList
-    fields = ["first_name", "last_name", "email", "username", "user_type"]
+    fields = ["first_name", "last_name", "email", "username", "user_type", "gross_salary", "phone_number", "work_location"]
     template_name = "KPITracker/userUpdate.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
@@ -180,6 +148,7 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
@@ -196,6 +165,7 @@ class ViewProjects(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
@@ -209,6 +179,7 @@ class ManageProject(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
@@ -246,6 +217,7 @@ class EditDesc(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
@@ -268,12 +240,20 @@ class PersonalInfoView(LoginRequiredMixin, DetailView):
 class ManageLocations(LoginRequiredMixin, CreateView):
     model = LocationsRegistered
     template_name = "KPITracker/manageLocations.html"
-    fields = ["name", "country", "region", "city", "street", "number", "zipcode", "lat", "lon"]
+    fields = ["name", "country", "region", "city", "street", "number", "zipcode", "lat", "lon", "misc_description"]
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
         return context
+
+    def get_success_url(self):
+        return reverse("KPIndustry:manage-locations")
+
+class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    template_name = "KPITracker/passwordReset"
+    email_template_name = "KPITracker/passwordResetEmail.html"

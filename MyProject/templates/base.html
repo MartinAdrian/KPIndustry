@@ -2,10 +2,11 @@
 <html lang="en">
 {% load static %}
 <head>
-  <meta name="viewport" content="user-scaleable=no">
   <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <title>Industry</title>
+  {% block head %}
+  {% endblock %}
 </head>
 <body>
   <div class="background-img">

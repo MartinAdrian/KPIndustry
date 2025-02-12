@@ -220,7 +220,7 @@ th {
 
 .login-area {
     position: relative;
-    width: 200px;
+    width: 225px;
     height: 100px;
     text-align: center;
     top: calc(25% - 50px);
@@ -235,12 +235,15 @@ th {
 
 .li-btn {
     background-color: rgba(0,0,0,0);
+    color: black;
+    text-decoration: none;
     width: 85px;
     height: 28px;
     padding: 3px;
     font-weight: bold;
     border: 1px solid rgba(0,0,0,0.2);
     border-radius: 5px;
+    font-family: Arial;
 }
 
 .li-btn:hover,
@@ -381,4 +384,63 @@ th {
 
 .full {
     height: 100%;
+}
+
+#map {
+    width: 768px;
+    height: 768px;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.inf-btn {
+    background-color: rgba(230,230,0,0.2);
+    color: black;
+    text-decoration: none;
+    width: 85px;
+    height: 28px;
+    padding: 3px;
+    font-weight: bold;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 5px;
+    font-family: Arial;
+}
+
+.inf-btn:hover,
+.inf-btn:focus {
+    background-color: rgba(230,230,0,0.4);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.succ-btn {
+    background-color: rgba(0,160,0,0.2);
+    color: black;
+    text-decoration: none;
+    width: 85px;
+    height: 28px;
+    padding: 3px;
+    font-weight: bold;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 5px;
+    font-family: Arial;
+}
+
+.succ-btn:hover,
+.succ-btn:focus {
+    background-color: rgba(0,160,0,0.4);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.latlon-area {
+    margin: 0px;
+    margin-left: 2px;
+    padding: 0px;
+    padding-left: 5px;
+    height: 17px;
+    text-height: 17px;
+    resize: none;
+    text-size: 5px;
+    display: block;
+    width: calc(100% - 11px);
 }
