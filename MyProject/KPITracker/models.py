@@ -19,7 +19,7 @@ class Projects(models.Model):
     project_activity = models.CharField("Project Activity", max_length=100, null=True)
     start_date=models.DateTimeField(null=True)
     end_date=models.DateTimeField(null=True)
-    active = models.BooleanField("Ongoing")
+    active = models.BooleanField("Ongoing", default=True)
     description = models.TextField("Project Description", max_length=2000, blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -31,9 +31,10 @@ class Projects(models.Model):
             self.active = False
             super(Projects, self).save(*args, **kwargs)
         else:
-            self.project_activity = "Ongoing"
-            self.start_date = datetime.datetime.now()
-            super(Projects, self).save(*args, **kwargs)
+            if not self.start_date:
+                self.project_activity = "Ongoing"
+                self.start_date = datetime.datetime.now()
+                super(Projects, self).save(*args, **kwargs)
 
     def __str__(self):
         return (f"Name: {self.project_name}\n"
@@ -64,3 +65,18 @@ class LocationsRegistered(models.Model):
     number = models.CharField("Number", max_length=200)
     zipcode = models.IntegerField("Zip Code")
     misc_description = models.CharField("Misc Description", null=True, max_length=800)
+
+
+class KPIReport(models.Model):
+    reporter_id = models.ForeignKey(UserList, on_delete=models.RESTRICT)
+    report_date = models.CharField("Creation Date", max_length=20)
+    on_project = models.CharField("Active Project", max_length=200)
+    critical_issues = models.IntegerField("Critical Issues", default=0)
+    major_issues = models.IntegerField("Major Issues", default=0)
+    medium_issues = models.IntegerField("Medium Issues", default=0)
+    minor_issues = models.IntegerField("Minor Issues", default=0)
+    test_cases_started = models.IntegerField("Started Test Cases", default=0)
+    test_cases_passed = models.IntegerField("Passed Test Cases", default=0)
+    test_cases_partially_passed = models.IntegerField("Partially Passed Test Cases", default=0)
+    test_cases_failed = models.IntegerField("Failed Test Cases", default=0)
+    test_cases_blocked = models.IntegerField("Unable to Check Test Cases", default=0)

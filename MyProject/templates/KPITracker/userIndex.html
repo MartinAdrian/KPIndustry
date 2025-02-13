@@ -46,6 +46,7 @@
         </td>
         <td>
           <select class="choose-box" name="work_location" required>
+            <option selected disabled>Select Work Location</option>
             {% for location in work_locations %}
               <option value="{{location}}">{{location}}</option>
             {% endfor %}
@@ -56,6 +57,7 @@
         </td>
         <td>
           <select class="choose-box" name="user_type" required>
+            <option selected disabled>Select User Type</option>
             <option value="Administrator">Administrator</option>
             <option value="Accountant">Accountant</option>
             <option value="Project Manager">Project Manager</option>
@@ -92,18 +94,22 @@
           <tr style="height: 42px">
             <td>{{item.id}}</td>
             <td>{{item.first_name}}</td>
-            <td>{{item.last_name}}</td>
+            <td>
+              <a style="color: black" href="{% url 'KPIndustry:pers-view' pk=item.id %}">{{item.last_name}}</a>
+            </td>
             <td>{{item.email}}</td>
             <td>{{item.phone_number}}</td>
             <td>{{item.username}}</td>
             <td>{{item.user_type}}</td>
             <td>
               {% if item.user_type == "Project Manager" %}
-                <select class="add-box" style="text-align: center">
-                  <option>-- Projects list --</option>
+                <select class="add-box" style="text-align: center" onchange="projectRedirect()" id="project_redirect">
+                  <option selected disabled>-- Projects list --</option>
                   {% for project in projects %}
                     {% if item.first_name in project.project_manager and item.last_name in project.project_manager %}
-                      <option>{{ project.project_name }}</option>
+                      {% if project.active %}
+                        <option value="{{project.id}}">{{ project.project_name }}</option>
+                      {% endif %}
                     {% endif %}
                   {% endfor %}
                 </select>

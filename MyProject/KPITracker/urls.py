@@ -6,7 +6,7 @@ app_name = "KPIndustry"
 
 urlpatterns = [
     path("", include("django.contrib.auth.urls"), {"next_page": "/"}, name="login"),
-    path("", LoginView.as_view(template_name="registration/login.html", redirect_authenticated_user=True), name="login"),
+    path("", views.LogIn.as_view(), name="login"),
     path("home/", views.HomeView.as_view(), name="homepage"),
     path("manage-users/", views.CreateUserView.as_view(), name="manage-users"),
     path("manage-users/<int:pk>/update/", views.UpdateUserView.as_view(), name="update-user"),
@@ -17,7 +17,7 @@ urlpatterns = [
     path("<int:pk>/reactivate/", views.reactivate_user, name="reactivate-user"),
     path("<int:pk>/reopen/", views.start_project, name="start-project"),
     path("view-projects/", views.ViewProjects.as_view(), name="view-projects"),
-    path("<int:pk>/manage/", views.ManageProject.as_view(), name="manage-project"),
+    path("<int:pk>/manage-project/", views.ManageProject.as_view(), name="manage-project"),
     path("<int:pId>/manage/<int:lId>/user-add/", views.add_user_to_project, name="user-add-project"),
     path("<int:pId>/manage/<int:lId>/user-rem/", views.rem_user_from_project, name="user-rem-project"),
     path("<int:pk>/manage/edit-desc/", views.EditDesc.as_view(), name="edit-desc-project"),

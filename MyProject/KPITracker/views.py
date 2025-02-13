@@ -1,5 +1,4 @@
 import datetime
-
 import requests
 from bs4 import BeautifulSoup
 from django import forms
@@ -7,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.template.base import kwarg_re
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
@@ -107,19 +107,13 @@ class UpdateUserView(LoginRequiredMixin, UpdateView):
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
-        projects = str(Projects.objects.values_list("project_manager", flat=True))
-        projects = projects[projects.find("[")+1:projects.find("]")].split(",")
-        fName = self.get_object().first_name
-        lName = self.get_object().last_name
-        for item in projects:
-            if fName in item and lName in item:
-                context["has_project"] = True
-        if self.get_object().on_project != "None":
-            context["is_taken"] = True
-
         return context
 
     def get_success_url(self):
+        user_type = self.object.user_type
+        user_id = self.object.id
+        if not user_type == "Tester" or not user_type == "Lead Tester":
+            UserList.objects.filter(id=user_id).update(on_project="None")
         return reverse("KPIndustry:manage-users")
 
 
@@ -198,6 +192,14 @@ def add_user_to_project(request, lId, pId):
     project_name = project_name[:project_name.find("'")]
     # print(project_name)
     UserList.objects.filter(id=lId).update(on_project=project_name)
+    user_id = request.user.id
+    date = datetime.date.today().strftime("%d-%m-%Y")
+    project = UserList.objects.filter(id=user_id).values_list("on_project", flat=True)[0]
+    if UserList.objects.filter(id=user_id).values_list("user_type", flat=True)[0] == "Tester":
+        if not KPIReport.objects.filter(reporter_id=user_id, report_date=date, on_project=project).exists():
+            if project:
+                KPIReport.objects.create(reporter_id=UserList.objects.filter(id=user_id).get(), on_project=str(project),
+                                         report_date=date)
 
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
@@ -234,6 +236,8 @@ class PersonalInfoView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        context["admins"] = list(UserList.objects.filter(user_type="Administrator").values_list("id", flat=True))
+        context["admins"] += list(UserList.objects.filter(user_type="Accountant").values_list("id", flat=True))
         return context
 
 
@@ -257,3 +261,17 @@ class ManageLocations(LoginRequiredMixin, CreateView):
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     template_name = "KPITracker/passwordReset"
     email_template_name = "KPITracker/passwordResetEmail.html"
+
+
+class LogIn(LoginView):
+    template_name = "registration/login.html"
+
+    def get_success_url(self):
+        user_id = self.request.user.id
+        date = datetime.date.today().strftime("%d-%m-%Y")
+        project = UserList.objects.filter(id=user_id).values_list("on_project", flat=True)[0]
+        if UserList.objects.filter(id=user_id).values_list("user_type", flat=True)[0] == "Tester":
+            if not KPIReport.objects.filter(reporter_id=user_id, report_date=date, on_project=project).exists():
+                if project:
+                    KPIReport.objects.create(reporter_id=UserList.objects.filter(id=user_id).get(), on_project=str(project), report_date=date)
+        return reverse("KPIndustry:homepage")

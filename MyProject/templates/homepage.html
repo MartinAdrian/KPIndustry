@@ -48,6 +48,9 @@
                     <a style="text-decoration: none" href="{% url 'KPIndustry:manage-projects' %}">
                       <p class="menu-btn">Manage Projects</p>
                     </a>
+                    <a style="text-decoration: none" href="{% url 'KPIndustry:manage-locations' %}">
+                      <p class="menu-btn">Manage Locations</p>
+                    </a>
                 {% endif %}
             {% endif %}
         {% endfor %}
@@ -62,9 +65,9 @@
         {% endfor %}
         {% for item in users %}
             {% if item.id == request.user.id %}
-                {% if item.user_type == "Administrator" %}
-                    <a style="text-decoration: none" href="{% url 'KPIndustry:manage-locations' %}">
-                      <p class="menu-btn">Manage Locations</p>
+                {% if item.user_type == "Tester" %}
+                    <a style="text-decoration: none" href="">
+                        <p class="menu-btn">Project Report</p>
                     </a>
                 {% endif %}
             {% endif %}

@@ -136,3 +136,5 @@ LOGOUT_REDIRECT_URL = "/KPIndustry/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # AUTH_USER_MODEL = "KPITracker.UserList"
+
+DATE_INPUT_FORMATS = ['%D-%M-%Y']
