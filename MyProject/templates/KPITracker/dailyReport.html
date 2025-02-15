@@ -1,0 +1,59 @@
+{% extends 'homepage.html' %}
+{% load static %}
+{% block logo %}
+  <a href="{% url 'KPIndustry:homepage' %}"><img src="{% static 'Logo.png' %}" height="100"></a>
+{% endblock %}
+
+{% block banner2 %}
+  {% if request.user.is_authenticated %}
+      <p style="margin:0px; text-align: center">Logged in as:</p>
+      <p style="margin: 0px; font-weight: bold; text-align: center">{{ request.user.first_name }} {{ request.user.last_name }}</p>
+  {% endif %}
+{% endblock %}
+
+{% block content2 %}
+    <form method="post">
+        {% csrf_token %}
+        <table class="content-table full">
+            <tr>
+                <th style="font-size: 25px" colspan="99">
+                    Daily Report - {{object.on_project}} - {{ object.report_date }}
+                </th>
+            </tr>
+            <tr style="height: 30px; max-height: 30px; min-height: 30px">
+                <th style="width: 12.5%">
+                    Reporter Name
+                </th>
+                <td style="width: 12.5%">
+                    {{request.user.first_name}} {{request.user.last_name}}
+                </td>
+                <th style="width: 12.5%">
+                    Report Date
+                </th>
+                <td style="width: 12.5%">
+                    {{object.report_date}}
+                </td>
+                <th style="width: 12.5%">
+                    Project Manager
+                </th>
+                <td style="width: 12.5%">
+                    {% for project in projects %}
+                        {% if project.project_name == object.on_project %}
+                            {{project.project_manager}}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <th style="width: 12.5%">
+                    Task
+                </th>
+                <td style="width: 12.5%">
+                    {% if object.task %}
+                        {{object.task}}
+                    {% else %}
+                        Please contact the Lead Tester
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </form>
+{% endblock %}

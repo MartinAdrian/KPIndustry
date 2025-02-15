@@ -80,3 +80,4 @@ class KPIReport(models.Model):
     test_cases_partially_passed = models.IntegerField("Partially Passed Test Cases", default=0)
     test_cases_failed = models.IntegerField("Failed Test Cases", default=0)
     test_cases_blocked = models.IntegerField("Unable to Check Test Cases", default=0)
+    task = models.CharField("Allocated Task", null=True,max_length=200)

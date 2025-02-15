@@ -23,9 +23,11 @@ class HomeView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["today_date"] = datetime.date.today().strftime("%d-%m-%Y")
         context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
         context["users"] = self.model.objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        context["report"] = apps.get_model("KPITracker", "KPIReport").objects.filter(reporter_id=self.request.user.id, report_date=datetime.date.today().strftime("%d-%m-%Y"))
         return context
 
 class CreateUserView(LoginRequiredMixin, CreateView):
@@ -235,6 +237,9 @@ class PersonalInfoView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["report"] = apps.get_model("KPITracker", "KPIReport").objects.filter(reporter_id=self.request.user.id,
+                                                                                     report_date=datetime.date.today().strftime(
+                                                                                         "%d-%m-%Y"))
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["admins"] = list(UserList.objects.filter(user_type="Administrator").values_list("id", flat=True))
         context["admins"] += list(UserList.objects.filter(user_type="Accountant").values_list("id", flat=True))
@@ -275,3 +280,21 @@ class LogIn(LoginView):
                 if project:
                     KPIReport.objects.create(reporter_id=UserList.objects.filter(id=user_id).get(), on_project=str(project), report_date=date)
         return reverse("KPIndustry:homepage")
+
+
+class ReportCompleting(LoginRequiredMixin, UpdateView):
+    model = KPIReport
+    template_name = "KPITracker/dailyReport.html"
+    fields = ["critical_issues", "major_issues", "medium_issues", "minor_issues", "test_cases_started", "test_cases_passed", "test_cases_partially_passed",
+              "test_cases_failed", "test_cases_blocked"]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["report"] = apps.get_model("KPITracker", "KPIReport").objects.filter(reporter_id=self.request.user.id,
+                                                                                     report_date=datetime.date.today().strftime(
+                                                                                         "%d-%m-%Y"))
+        context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
+        context["objects"] = self.model.objects.all()
+        context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        return context
