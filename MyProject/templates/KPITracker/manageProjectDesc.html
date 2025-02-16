@@ -45,69 +45,77 @@
                 <td style="padding-left: 5px; padding-right: 5px">{{object.id}}</td>
                 <td  style="height: 30px">{{object.project_partner}}</td>
                 <td>{{object.project_manager}}</td>
-                <td rowspan="6" class="adding-cell">
-                    <table class="hidden-table">
-                        {% for user in users %}
-                            {% if user.user_type == "Lead Tester" and user.on_project == "None" %}
-                                <tr>
-                                    <td>
-                                        <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
-                                    </td>
-                                    <td>
-                                        <a aria-disabled="true" class="add-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-add-project' object.id user.id %}">></a>
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
+                <td rowspan="7" class="adding-cell">
+                    <div class="proj-add-rem-cell">
+                        <table class="hidden-table">
+                            {% for user in users %}
+                                {% if user.user_type == "Lead Tester" and user.on_project == "None" %}
+                                    <tr>
+                                        <td>
+                                            <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
+                                        </td>
+                                        <td>
+                                            <a aria-disabled="true" class="add-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-add-project' object.id user.id %}">></a>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
                 </td>
-                <td rowspan="6" class="adding-cell">
-                    <table class="hidden-table">
-                        {% for user in users %}
-                            {% if user.user_type == "Lead Tester" and user.on_project == object.project_name %}
-                                <tr>
-                                    <td style="width: 1px">
-                                        <a aria-disabled="true" class="deactivate-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-rem-project' object.id user.id %}"><</a>
-                                    </td>
-                                    <td>
-                                        <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
+                <td rowspan="7" class="adding-cell">
+                    <div class="proj-add-rem-cell">
+                        <table class="hidden-table">
+                            {% for user in users %}
+                                {% if user.user_type == "Lead Tester" and user.on_project == object.project_name %}
+                                    <tr>
+                                        <td style="width: 1px">
+                                            <a aria-disabled="true" class="deactivate-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-rem-project' object.id user.id %}"><</a>
+                                        </td>
+                                        <td>
+                                            <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
                 </td>
-                <td rowspan="6" class="adding-cell">
-                    <table class="hidden-table">
-                        {% for user in users %}
-                            {% if user.user_type == "Tester" and user.on_project == "None" %}
-                                <tr>
-                                    <td>
-                                        <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
-                                    </td>
-                                    <td>
-                                        <a aria-disabled="true" class="add-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-add-project' object.id user.id %}">></a>
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
+                <td rowspan="7" class="adding-cell">
+                    <div class="proj-add-rem-cell">
+                        <table class="hidden-table">
+                            {% for user in users %}
+                                {% if user.user_type == "Tester" and user.on_project == "None" %}
+                                    <tr>
+                                        <td>
+                                            <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
+                                        </td>
+                                        <td>
+                                            <a aria-disabled="true" class="add-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-add-project' object.id user.id %}">></a>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
                 </td>
-                <td rowspan="6" class="adding-cell">
-                    <table class="hidden-table">
-                        {% for user in users %}
-                            {% if user.user_type == "Tester" and user.on_project == object.project_name %}
-                                <tr>
-                                    <td style="width: 1px">
-                                        <a aria-disabled="true" class="deactivate-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-rem-project' object.id user.id %}"><</a>
-                                    </td>
-                                    <td>
-                                        <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </table>
+                <td rowspan="7" class="adding-cell">
+                    <div class="proj-add-rem-cell">
+                        <table class="hidden-table">
+                            {% for user in users %}
+                                {% if user.user_type == "Tester" and user.on_project == object.project_name %}
+                                    <tr>
+                                        <td style="width: 1px">
+                                            <a aria-disabled="true" class="deactivate-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-rem-project' object.id user.id %}"><</a>
+                                        </td>
+                                        <td>
+                                            <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                    </div>
                 </td>
             </tr>
             <tr style="height: 30px">
@@ -125,8 +133,188 @@
                 <th colspan="2">Ending Date</th><td>{{object.end_date}}</td>
             </tr>
             <tr style="height: 30px">
-                <td style="border: 0px; height: 100%"></td>
+            <th style="height: 30px" colspan="2">Project Tasks</th>
+            <td colspan="2" rowspan="2">
+                <table class="hidden-table" style="table-layout: fixed">
+                    <tr>
+                        <td>
+                            <div style="height: 255px; width: 100%; display: inline-block; margin: 0px; padding: 0px">
+                                <canvas id="kpiOverviewISS" style="background: rgba(255,255,255,0.2)"></canvas>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="height: 255px; width: 100%; display: inline-block; margin: 0px; padding: 0px">
+                                <canvas id="kpiOverviewTCS" style="background: rgba(255,255,255,0.2)"></canvas>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+            <tr>
+                <td style="height: 100%; vertical-align: top" colspan="2">
+                    <div class="misc-overflow" style="height: 485px; overflow: auto">
+                        <p style="margin: 0px">Task Name</p>
+                    </div>
+                </td>
             </tr>
         </table>
     </form>
+    <script>
+
+        const todayDate = "{{today_date.date}}"
+        const projId = "{{object.id}}"
+
+        let criticalISS = 0
+        let majorISS = 0
+        let mediumISS = 0
+        let minorISS = 0
+        let optionalISS = 0
+
+        let tCriticalISS = 0
+        let tMajorISS = 0
+        let tMediumISS = 0
+        let tMinorISS = 0
+        let tOptionalISS = 0
+
+        const labelsISS = ["Critical", "Major", "Medium", "Minor", "Optional"]
+        const colorsISS = ["rgba(255,0,0,0.6)","rgba(255,120,0,0.6)", "rgba(200,200,0,0.6)", "rgba(0,200,0,0.6)", "rgba(0,0,160,0.6)"]
+
+        let startedTCS = 0
+        let passedTCS = 0
+        let partiallyPassedTCS = 0
+        let blockedTCS = 0
+        let failedTCS = 0
+
+        let tStartedTCS = 0
+        let tPassedTCS = 0
+        let tPartiallyPassedTCS = 0
+        let tBlockedTCS = 0
+        let tFailedTCS = 0
+
+        const labelsTCS = ["Started", "Passed", "Partially", "Blocked", "Failed"]
+        const colorsTCS = ["rgba(0,0,160,0.6)", "rgba(0,200,0,0.6)", "rgba(200,200,0,0.6)", "rgba(255,120,0,0.6)", "rgba(255,0,0,0.6)"]
+
+        const daysOnProject = {{days_worked.num}}
+        console.log(daysOnProject)
+
+        {% for rep in reports %}
+            {% if rep.on_project == object.project_name %}
+                {% if rep.report_date == today_date.date %}
+                    criticalISS += {{rep.critical_issues}}
+                    majorISS += {{rep.major_issues}}
+                    mediumISS += {{rep.medium_issues}}
+                    minorISS += {{rep.minor_issues}}
+                    optionalISS += {{rep.optional_issues}}
+                    startedTCS += {{rep.test_cases_started}}
+                    passedTCS += {{rep.test_cases_passed}}
+                    partiallyPassedTCS += {{rep.test_cases_partially_passed}}
+                    blockedTCS += {{rep.test_cases_blocked}}
+                    failedTCS += {{rep.test_cases_failed}}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        {% for rep in reports %}
+            {% if rep.on_project == object.project_name %}
+                tCriticalISS += {{rep.critical_issues}}
+                tMajorISS += {{rep.major_issues}}
+                tMediumISS += {{rep.medium_issues}}
+                tMinorISS += {{rep.minor_issues}}
+                tOptionalISS += {{rep.optional_issues}}
+                tStartedTCS += {{rep.test_cases_started}}
+                tPassedTCS += {{rep.test_cases_passed}}
+                tPartiallyPassedTCS += {{rep.test_cases_partially_passed}}
+                tBlockedTCS += {{rep.test_cases_blocked}}
+                tFailedTCS += {{rep.test_cases_failed}}
+            {% endif %}
+        {% endfor %}
+
+        const issueValues = [criticalISS, majorISS, mediumISS, minorISS, optionalISS];
+        const avgIssueValues = [Math.round(tCriticalISS / daysOnProject), Math.round(tMajorISS / daysOnProject), Math.round(tMediumISS / daysOnProject), Math.round(tMinorISS / daysOnProject), Math.round(tOptionalISS / daysOnProject)];
+        const tcsValues = [startedTCS, passedTCS, partiallyPassedTCS, blockedTCS, failedTCS];
+        const avgTcsValues = [Math.round(tStartedTCS / daysOnProject), Math.round(tPassedTCS / daysOnProject), Math.round(tPartiallyPassedTCS / daysOnProject), Math.round(tBlockedTCS / daysOnProject), Math.round(tFailedTCS / daysOnProject)];
+
+        Chart.defaults.color = "#000"
+
+        new Chart("kpiOverviewISS", {
+            type: "bar",
+            data: {
+                labels: labelsISS,
+                datasets: [{
+                    label: "Today",
+                    backgroundColor: colorsISS,
+                    borderColor: 'rgba(0,0,0,1)',
+                    borderWidth: 2,
+                    data: issueValues,
+                },
+                {
+                    label: "Overall Average",
+                    backgroundColor: colorsISS,
+                    borderColor: "rgb(255,255,255)",
+                    borderWidth: 2,
+                    data: avgIssueValues,
+                },
+                ],
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    legend:{
+                        labels: {
+                            boxWidth: 15,
+                        },
+                    },
+                    title: {
+                        display: true,
+                        text: "Ticket Report Overview",
+                    },
+                    colors: {
+                        enabled: false,
+                    },
+                },
+            },
+        });
+
+        new Chart("kpiOverviewTCS", {
+            type: "bar",
+            data: {
+                labels: labelsTCS,
+                datasets: [{
+                    label: "Today",
+                    backgroundColor: colorsTCS,
+                    borderColor: 'rgba(0,0,0,1)',
+                    borderWidth: 2,
+                    data: tcsValues
+                },
+                {
+                    label: "Overall Average",
+                    backgroundColor: colorsTCS,
+                    borderColor: 'rgba(255,255,255,1)',
+                    borderWidth: 2,
+                    data: avgTcsValues,
+                },
+                ],
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    legend:{
+                        labels: {
+                            boxWidth: 15,
+                        },
+                    },
+                    title: {
+                        display: true,
+                        text: "Ticket Report Overview",
+                    },
+                },
+            },
+        });
+
+    </script>
 {% endblock %}

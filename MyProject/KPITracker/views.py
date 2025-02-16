@@ -27,7 +27,8 @@ class HomeView(LoginRequiredMixin, ListView):
         context["work_locations"] = LocationsRegistered.objects.values_list("name", flat=True)
         context["users"] = self.model.objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
-        context["report"] = apps.get_model("KPITracker", "KPIReport").objects.filter(reporter_id=self.request.user.id, report_date=datetime.date.today().strftime("%d-%m-%Y"))
+        context["report"] = KPIReport.objects.filter(reporter_id=self.request.user.id, report_date=datetime.date.today().strftime("%d-%m-%Y"))
+        context["reports"] = apps.get_model("KPITracker", "KPIReport").objects.all()
         return context
 
 class CreateUserView(LoginRequiredMixin, CreateView):
@@ -42,6 +43,7 @@ class CreateUserView(LoginRequiredMixin, CreateView):
         context["objects"] = self.model.objects.all()
         context["users"] = self.model.objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        context["reports"] = apps.get_model("KPITracker", "KPIReport").objects.all()
         return context
 
     def get_success_url(self):
@@ -91,6 +93,7 @@ class CreateProjectsView(LoginRequiredMixin, CreateView):
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        context["reports"] = apps.get_model("KPITracker", "KPIReport").objects.all()
         return context
 
     def get_success_url(self):
@@ -109,6 +112,7 @@ class UpdateUserView(LoginRequiredMixin, UpdateView):
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        context["reports"] = apps.get_model("KPITracker", "KPIReport").objects.all()
         return context
 
     def get_success_url(self):
@@ -148,6 +152,7 @@ class UpdateProjectView(LoginRequiredMixin, UpdateView):
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        context["reports"] = apps.get_model("KPITracker", "KPIReport").objects.all()
         return context
 
     def get_success_url(self):
@@ -165,6 +170,7 @@ class ViewProjects(LoginRequiredMixin, ListView):
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        context["reports"] = apps.get_model("KPITracker", "KPIReport").objects.all()
         return context
 
 
@@ -179,6 +185,9 @@ class ManageProject(LoginRequiredMixin, DetailView):
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        context["reports"] = apps.get_model("KPITracker", "KPIReport").objects.all()
+        context["today_date"] = {"date": str(datetime.date.today().strftime("%d-%m-%Y"))}
+        context["days_worked"] = {"num": len(list(set(KPIReport.objects.filter(on_project=self.object.project_name).values_list("report_date", flat=True))))}
         return context
 
     def get_success_url(self, request):
@@ -225,6 +234,10 @@ class EditDesc(LoginRequiredMixin, UpdateView):
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        context["reports"] = apps.get_model("KPITracker", "KPIReport").objects.all()
+        context["today_date"] = {"date": str(datetime.date.today().strftime("%d-%m-%Y"))}
+        context["days_worked"] = {"num": len(list(
+            set(KPIReport.objects.filter(on_project=self.object.project_name).values_list("report_date", flat=True))))}
         return context
 
     def get_success_url(self):
@@ -237,12 +250,15 @@ class PersonalInfoView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["report"] = apps.get_model("KPITracker", "KPIReport").objects.filter(reporter_id=self.request.user.id,
-                                                                                     report_date=datetime.date.today().strftime(
-                                                                                         "%d-%m-%Y"))
-        context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
+        context["report"] = KPIReport.objects.filter(reporter_id=self.request.user.id,report_date=datetime.date.today().strftime("%d-%m-%Y"))
+        context["report1"] = {"report": KPIReport.objects.filter(reporter_id=self.request.user.id,report_date=datetime.date.today().strftime("%d-%m-%Y"))}
+        context["users"] = UserList.objects.all()
         context["admins"] = list(UserList.objects.filter(user_type="Administrator").values_list("id", flat=True))
         context["admins"] += list(UserList.objects.filter(user_type="Accountant").values_list("id", flat=True))
+        context["reports"] = KPIReport.objects.all()
+        context["today_date"] = {"date": str(datetime.date.today().strftime("%d-%m-%Y"))}
+        context["reports_num"] = {"num": len(list(KPIReport.objects.filter(reporter_id_id=self.object.id)))}
+        context["reports_num_proj"] = {"num": len(list(KPIReport.objects.filter(reporter_id_id=self.object.id, on_project=self.object.on_project)))}
         return context
 
 
@@ -258,6 +274,7 @@ class ManageLocations(LoginRequiredMixin, CreateView):
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        context["reports"] = apps.get_model("KPITracker", "KPIReport").objects.all()
         return context
 
     def get_success_url(self):
@@ -281,12 +298,20 @@ class LogIn(LoginView):
                     KPIReport.objects.create(reporter_id=UserList.objects.filter(id=user_id).get(), on_project=str(project), report_date=date)
         return reverse("KPIndustry:homepage")
 
+@login_required
+def report_redirect(request):
+    date = datetime.date.today().strftime("%d-%m-%Y")
+    user_id = request.users.id
+    project = UserList.objects.filter(id=request.users.id).values_list("on_project", flat=True)
+    report_pk = KPIReport.objects.filter(reporter_id=user_id, report_date=date, on_project=project)
+
+    return
 
 class ReportCompleting(LoginRequiredMixin, UpdateView):
     model = KPIReport
     template_name = "KPITracker/dailyReport.html"
     fields = ["critical_issues", "major_issues", "medium_issues", "minor_issues", "test_cases_started", "test_cases_passed", "test_cases_partially_passed",
-              "test_cases_failed", "test_cases_blocked"]
+              "test_cases_failed", "test_cases_blocked", "report_observations", "optional_issues"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -297,4 +322,8 @@ class ReportCompleting(LoginRequiredMixin, UpdateView):
         context["objects"] = self.model.objects.all()
         context["users"] = apps.get_model("KPITracker", "UserList").objects.all()
         context["projects"] = apps.get_model("KPITracker", "Projects").objects.all()
+        context["reports"] = apps.get_model("KPITracker", "KPIReport").objects.all()
         return context
+
+    def get_success_url(self):
+        return redirect("KPIndustry:daily-report", str(self.kwargs["pk"])).url

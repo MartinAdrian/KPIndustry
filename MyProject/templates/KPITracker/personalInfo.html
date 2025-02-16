@@ -23,7 +23,34 @@
                 <td style="width: 200px">{{object.last_name}}</td>
                 <th style="height: 2px; width: 140px">Position</th>
                 <td style="width: 150px">{{object.user_type}}</td>
-                <td rowspan="3" style="width: 1200px"></td>
+                <td rowspan="3" style="width: 1200px">
+                    <table class="hidden-table" style="table-layout: fixed">
+                        <tr>
+                            <td>
+                                <div style="display: inline-block; height: 362px; width: 100%">
+                                    <canvas id="c_project_issues" style="background: rgba(255,255,255,0.2)"></canvas>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: inline-block; height: 362px; width: 100%">
+                                    <canvas id="c_project_issues_o" style="background: rgba(255,255,255,0.2)"></canvas>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="display: inline-block; height: 362px; width: 100%">
+                                    <canvas id="c_project_tcs" style="background: rgba(255,255,255,0.2)"></canvas>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: inline-block; height: 362px; width: 100%">
+                                    <canvas id="c_project_tcs_o" style="background: rgba(255,255,255,0.2)"></canvas>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
             <tr>
                 <th style="height: 40px; width: 2px">Surname</th>
@@ -38,10 +65,237 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="20" style="width: 20px"></td>
+                <td colspan="5" style="width: 20px"></td>
             </tr>
         </table>
     {% else %}
         <h1 style="width: 100%; text-align: center">Unauthorized</h1>
     {% endif %}
+    <script>
+
+        const issue_labels = ["Critical", "Major", "Medium", "Minor", "Optional"]
+        const tcs_labels = ["Started", "Passed", "Partially", "Blocked", "Failed"]
+        const issue_colors = ["rgba(255,0,0,0.6)","rgba(255,120,0,0.6)", "rgba(200,200,0,0.6)", "rgba(0,200,0,0.6)", "rgba(0,0,160,0.6)"]
+        const tcs_colors = ["rgba(0,0,160,0.6)", "rgba(0,200,0,0.6)", "rgba(200,200,0,0.6)", "rgba(255,120,0,0.6)", "rgba(255,0,0,0.6)"]
+        {% for rep in report %}
+            {% if rep.on_project == object.on_project %}
+                let tCritical = "{{rep.critical_issues}}"
+                let tMajor = "{{rep.major_issues}}"
+                let tMedium = "{{rep.medium_issues}}"
+                let tMinor = "{{rep.minor_issues}}"
+                let tOptional = "{{rep.optional_issues}}"
+            {% endif %}
+        {% endfor %}
+
+        let tIssues = [tCritical, tMajor, tMedium, tMinor, tOptional]
+
+        const stop_please = [0,0,0,0,0]
+
+        Chart.defaults.color = "rgb(0,0,0)"
+
+        new Chart("c_project_issues", {
+            type: "bar",
+            data: {
+                labels: issue_labels,
+                datasets: [{
+                    backgroundColor: issue_colors,
+                    borderWidth: 1,
+                    borderColor: "rgb(0,0,0)",
+                    data: tIssues,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Today's Tickets on {{object.on_project}}"
+                    },
+                    legend: {
+                        display: false,
+                    },
+                },
+            },
+        })
+
+        let poCritical = 0
+        let poMajor = 0
+        let poMedium = 0
+        let poMinor = 0
+        let poOptional = 0
+        {% for repo in reports %}
+            {% if repo.reporter_id_id == object.id %}
+                {% if repo.on_project == object.on_project %}
+                    poCritical += {{repo.critical_issues}}
+                    poMajor += {{repo.major_issues}}
+                    poMedium += {{repo.medium_issues}}
+                    poMinor += {{repo.minor_issues}}
+                    poOptional += {{repo.optional_issues}}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        let poIssues = [poCritical / {{reports_num_proj.num}}, poMajor / {{reports_num_proj.num}}, poMedium / {{reports_num_proj.num}}, poMinor / {{reports_num_proj.num}}, poOptional / {{reports_num_proj.num}}]
+
+        let oCritical = 0
+        let oMajor = 0
+        let oMedium = 0
+        let oMinor = 0
+        let oOptional = 0
+        {% for repo in reports %}
+            {% if repo.reporter_id_id == object.id %}
+                {% if repo.on_project == object.on_project %}
+                    oCritical += {{repo.critical_issues}}
+                    oMajor += {{repo.major_issues}}
+                    oMedium += {{repo.medium_issues}}
+                    oMinor += {{repo.minor_issues}}
+                    oOptional += {{repo.optional_issues}}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        let oIssues = [oCritical / {{reports_num.num}}, oMajor / {{reports_num.num}}, oMedium / {{reports_num.num}}, oMinor / {{reports_num.num}}, oOptional / {{reports_num.num}}]
+
+        new Chart("c_project_issues_o", {
+            type: "bar",
+            data: {
+                labels: issue_labels,
+                datasets: [{
+                    label: "Project Avg./Day",
+                    backgroundColor: issue_colors,
+                    borderWidth: 1,
+                    borderColor: "rgb(0,0,0)",
+                    data: poIssues,
+                },
+                {
+                    label: "Overall Avg./Day",
+                    backgroundColor: issue_colors,
+                    borderWidth: 1,
+                    borderColor: "rgb(255,255,255)",
+                    data: oIssues,
+                },],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Avg. Tickets/Day on Project vs. Overall",
+                    },
+                    legend: {
+                        labels: {
+                            boxWidth: 15,
+                        },
+                    },
+                },
+            },
+        })
+        {% for rep in report %}
+            {% if rep.on_project == object.on_project %}
+                let tStarted = {{rep.test_cases_started}}
+                let tPassed = {{rep.test_cases_passed}}
+                let tPartiallyPassed = {{rep.test_cases_partially_passed}}
+                let tBlocked = {{rep.test_cases_blocked}}
+                let tFailed = {{rep.test_cases_failed}}
+            {% endif %}
+        {% endfor %}
+        let tTCS = [tStarted, tPassed, tPartiallyPassed, tBlocked, tFailed]
+
+        new Chart("c_project_tcs", {
+            type: "bar",
+            data: {
+                labels: tcs_labels,
+                datasets: [{
+                    backgroundColor: tcs_colors,
+                    borderWidth: 1,
+                    borderColor: "rgb(0,0,0)",
+                    data: tTCS,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Today's Test Cases on {{object.on_project}}",
+                    },
+                    legend: {
+                        display: false,
+                    },
+                },
+            },
+        })
+
+        let poStarted = 0
+        let poPassed = 0
+        let poPartiallyPassed = 0
+        let poBlocked = 0
+        let poFailed = 0
+        {% for repo in reports %}
+            {% if repo.reporter_id_id == object.id %}
+                {% if repo.on_project == object.on_project %}
+                    poStarted += {{repo.test_cases_started}}
+                    poPassed += {{repo.test_cases_passed}}
+                    poPartiallyPassed += {{repo.test_cases_partially_passed}}
+                    poBlocked += {{repo.test_cases_blocked}}
+                    poFailed += {{repo.test_cases_failed}}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        let poTCS = [poStarted / {{reports_num_proj.num}}, poPassed / {{reports_num_proj.num}}, poPartiallyPassed / {{reports_num_proj.num}}, poBlocked / {{reports_num_proj.num}}, poFailed / {{reports_num_proj.num}}]
+
+        let oStarted = 0
+        let oPassed = 0
+        let oPartiallyPassed = 0
+        let oBlocked = 0
+        let oFailed = 0
+        {% for repo in reports %}
+            {% if repo.reporter_id_id == object.id %}
+                oStarted += {{repo.test_cases_started}}
+                oPassed += {{repo.test_cases_passed}}
+                oPartiallyPassed += {{repo.test_cases_partially_passed}}
+                oBlocked += {{repo.test_cases_blocked}}
+                oFailed += {{repo.test_cases_failed}}
+            {% endif %}
+        {% endfor %}
+        let oTCS = [oStarted / {{reports_num.num}}, oPassed / {{reports_num.num}}, oPartiallyPassed / {{reports_num.num}}, oBlocked / {{reports_num.num}}, oFailed / {{reports_num.num}}]
+
+        new Chart("c_project_tcs_o", {
+            type: "bar",
+            data: {
+                labels: tcs_labels,
+                datasets: [{
+                    label: "Project Avg./Day",
+                    backgroundColor: tcs_colors,
+                    borderWidth: 1,
+                    borderColor: "rgb(0,0,0)",
+                    data: poTCS,
+                },
+                {
+                    label: "Overall Avg./Day",
+                    backgroundColor: tcs_colors,
+                    borderWidth: 1,
+                    borderColor: "rgb(255,255,255)",
+                    data: oTCS,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Avg. Test Cases/Day on Project vs. Overall",
+                    },
+                    legend: {
+                        labels: {
+                            boxWidth: 15,
+                        },
+                    },
+                },
+            },
+        })
+
+    </script>
 {% endblock %}

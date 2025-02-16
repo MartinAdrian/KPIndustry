@@ -63,6 +63,7 @@ th {
 .content-area::-webkit-scrollbar,
 .proj-desc::-webkit-scrollbar,
 .proj-add-rem-cell::-webkit-scrollbar,
+.misc-overflow::-webkit-scrollbar,
 .user-overflow::-webkit-scrollbar {
     width: 3px;
     height: 3px;
@@ -71,6 +72,7 @@ th {
 .content-area::-webkit-scrollbar-corner,
 .proj-desc::-webkit-scrollbar-corner,
 .proj-add-rem-cell::-webkit-scrollbar-corner,
+.misc-overflow::-webkit-scrollbar-corner,
 .user-overflow::-webkit-scrollbar-corner{
     box-shadow: inset 0 0 2px rgba(0,0,0,0);
 }
@@ -78,6 +80,7 @@ th {
 .content-area::-webkit-scrollbar-track-piece,
 .proj-desc::-webkit-scrollbar-track-piece,
 .proj-add-rem-cell::-webkit-scrollbar-track-piece,
+.misc-overflow::-webkit-scrollbar-track-piece,
 .user-overflow::-webkit-scrollbar-track-piece{
     background: rgba(0,0,0,0);
 }
@@ -85,6 +88,7 @@ th {
 .content-area::-webkit-scrollbar-button,
 .proj-desc::-webkit-scrollbar-button,
 .proj-add-rem-cell::-webkit-scrollbar-button,
+.misc-overflow::-webkit-scrollbar-button,
 .user-overflow::-webkit-scrollbar-button{
     background: rgba(0,0,0,0.2);
     height: 3px;
@@ -94,6 +98,7 @@ th {
 .content-area::-webkit-scrollbar-thumb,
 .proj-desc::-webkit-scrollbar-thumb,
 .proj-add-rem-cell::-webkit-scrollbar-thumb,
+.misc-overflow::-webkit-scrollbar-thumb,
 .user-overflow::-webkit-scrollbar-thumb{
     background: rgba(0,0,0,0.2);
 }
@@ -443,4 +448,9 @@ th {
     text-size: 5px;
     display: block;
     width: calc(100% - 11px);
+}
+
+input[type=number]::-webkit-inner-spin-button{
+    opacity: .3 !important;
+    height: 25px;
 }

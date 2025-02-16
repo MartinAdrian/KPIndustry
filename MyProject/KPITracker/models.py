@@ -1,4 +1,5 @@
 import datetime
+import json
 import string
 import random
 
@@ -20,7 +21,7 @@ class Projects(models.Model):
     start_date=models.DateTimeField(null=True)
     end_date=models.DateTimeField(null=True)
     active = models.BooleanField("Ongoing", default=True)
-    description = models.TextField("Project Description", max_length=2000, blank=True, null=True)
+    description = models.TextField("Project Description", blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.start_date and not self.end_date:
@@ -34,7 +35,7 @@ class Projects(models.Model):
             if not self.start_date:
                 self.project_activity = "Ongoing"
                 self.start_date = datetime.datetime.now()
-                super(Projects, self).save(*args, **kwargs)
+            super(Projects, self).save(*args, **kwargs)
 
     def __str__(self):
         return (f"Name: {self.project_name}\n"
@@ -64,7 +65,7 @@ class LocationsRegistered(models.Model):
     street = models.CharField("Street", max_length=200)
     number = models.CharField("Number", max_length=200)
     zipcode = models.IntegerField("Zip Code")
-    misc_description = models.CharField("Misc Description", null=True, max_length=800)
+    misc_description = models.TextField("Misc Description",null=True, blank=True)
 
 
 class KPIReport(models.Model):
@@ -75,9 +76,23 @@ class KPIReport(models.Model):
     major_issues = models.IntegerField("Major Issues", default=0)
     medium_issues = models.IntegerField("Medium Issues", default=0)
     minor_issues = models.IntegerField("Minor Issues", default=0)
+    optional_issues = models.IntegerField("Optional Issues", default=0)
     test_cases_started = models.IntegerField("Started Test Cases", default=0)
     test_cases_passed = models.IntegerField("Passed Test Cases", default=0)
     test_cases_partially_passed = models.IntegerField("Partially Passed Test Cases", default=0)
     test_cases_failed = models.IntegerField("Failed Test Cases", default=0)
     test_cases_blocked = models.IntegerField("Unable to Check Test Cases", default=0)
+    report_observations = models.TextField("Observations", blank=True, null=True, max_length=2000)
     task = models.CharField("Allocated Task", null=True,max_length=200)
+
+
+class ProjectTasks(models.Model):
+    project_id = models.ForeignKey(Projects, on_delete=models.RESTRICT)
+    task_name = models.CharField("Task Name", max_length=200)
+    assigned_testers = models.TextField("Assigned testers", blank=True)
+
+    def get_assigned_testers(self):
+        return json.loads(self.assigned_testers)
+
+    def set_assigned_testers(self, to_add):
+        self.assigned_testers = json.dumps(to_add)

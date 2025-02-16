@@ -12,3 +12,4 @@ function projectRedirect() {
       var link = `${domain_address}/KPIndustry/${project_id}/manage-project/`
       window.location.href = link;
     }
+

@@ -11,42 +11,47 @@
   {% endif %}
 {% endblock %}
 
+{% block head %}
+
+{% endblock %}
+
 {% block content2 %}
+
     <form method="post">
         {% csrf_token %}
-        <table class="content-table full">
+        <table class="content-table full" style="table-layout: fixed">
             <tr>
-                <th style="font-size: 25px" colspan="99">
-                    Daily Report - {{object.on_project}} - {{ object.report_date }}
+                <th style="font-size: 25px; text-align: center; vertical-align: middle" colspan="16" align="center">
+                    Daily Report - {{object.on_project}} - {{ object.report_date }} <button class="inf-btn" style="font-size: 15px;width: 50px; height: 20px; padding: 0px" type="submit">Save</button>
                 </th>
             </tr>
             <tr style="height: 30px; max-height: 30px; min-height: 30px">
-                <th style="width: 12.5%">
+                <th style="width: 12.5%; max-width: 12.5%" colspan="2">
                     Reporter Name
                 </th>
-                <td style="width: 12.5%">
+                <td style="width: 12.5%; max-width: 12.5%" colspan="2">
                     {{request.user.first_name}} {{request.user.last_name}}
                 </td>
-                <th style="width: 12.5%">
+                <th style="width: 12.5%; max-width: 12.5%" colspan="2">
                     Report Date
                 </th>
-                <td style="width: 12.5%">
+                <td style="width: 12.5%; max-width: 12.5%" colspan="2">
                     {{object.report_date}}
                 </td>
-                <th style="width: 12.5%">
+                <th style="width: 12.5%; max-width: 12.5%" colspan="2">
                     Project Manager
                 </th>
-                <td style="width: 12.5%">
+                <td style="width: 12.5%; max-width: 12.5%" colspan="2">
                     {% for project in projects %}
                         {% if project.project_name == object.on_project %}
                             {{project.project_manager}}
                         {% endif %}
                     {% endfor %}
                 </td>
-                <th style="width: 12.5%">
+                <th style="width: 12.5%; max-width: 12.5%" colspan="2">
                     Task
                 </th>
-                <td style="width: 12.5%">
+                <td style="width: 12.5%; max-width: 12.5%" colspan="2">
                     {% if object.task %}
                         {{object.task}}
                     {% else %}
@@ -54,6 +59,316 @@
                     {% endif %}
                 </td>
             </tr>
+            <tr style="height: 30px">
+                <th colspan="4">Testing Overview and Conclusions</th>
+                <th colspan="4">Test Case Results</th>
+                <th colspan="4">Reported Tickets</th>
+                <th colspan="4">Task Information</th>
+            </tr>
+            <tr style="height: 41px">
+                <td colspan="4" rowspan="7">
+                    <textarea class="add-box" name="report_observations" style="resize: none; height: 98%">{{form.report_observations.value}}</textarea>
+                </td>
+                <th style="width: 6.25%; background-color: rgba(0,0,160,0.2)">Started</th>
+                <td style="width: 6.25%">
+                    <input class="add-box" name="test_cases_started" type="number" style="text-align: center; width: 75px; height: 25px" min="{{form.test_cases_started.value}}" value="{{form.test_cases_started.value}}" onKeyDown="return false">
+                </td>
+                <th style="width: 6.25%">
+                    Entered
+                </th>
+                <td style="width: 6.25%"><p id="startedTC">{{form.test_cases_started.value}}</p></td>
+                <th style="width: 6.25%; background-color: rgba(255,0,0,0.2)">Critical</th>
+                <td style="width: 6.25%">
+                    <input class="add-box" name="critical_issues" type="number" style="text-align: center; width: 75px; height: 25px" min="{{form.critical_issues.value}}" value="{{form.critical_issues.value}}" onKeyDown="return false">
+                </td>
+                <th style="width: 6.25%">
+                    Reported
+                </th>
+                <td style="width: 6.25%" id="criticalISS">{{form.critical_issues.value}}</td>
+                <td rowspan="5" colspan="4">
+                    {% if not object.task %}
+                        <p style="width: 98%; height: 100%; margin: 5px" align="left">Information will be available after receiving a task from the Lead Tester/s</p>
+                    {% else %}
+
+                    {% endif %}
+                </td>
+            </tr>
+            <tr style="height: 41px">
+                <th style="width: 6.25%; background-color: rgba(0,200,0,0.2)">Passed</th>
+                <td style="width: 6.25%">
+                    <input class="add-box" name="test_cases_passed" type="number" style="text-align: center; width: 75px; height: 25px" min="{{form.test_cases_passed.value}}" value="{{form.test_cases_passed.value}}" onKeyDown="return false">
+                </td>
+                <th style="width: 6.25%">
+                    Entered
+                </th>
+                <td style="width: 6.25%" id="passedTC">{{form.test_cases_passed.value}}</td>
+                <th style="width: 6.25%; background-color: rgba(255,125,0,0.2)">Major</th>
+                <td style="width: 6.25%">
+                    <input class="add-box" name="major_issues" type="number" style="text-align: center; width: 75px; height: 25px" min="{{form.major_issues.value}}" value="{{form.major_issues.value}}" onKeyDown="return false">
+                </td>
+                <th style="width: 6.25%">
+                    Reported
+                </th>
+                <td style="width: 6.25%" id="majorISS">{{form.major_issues.value}}</td>
+            </tr>
+            <tr style="height: 41px">
+                <th style="width: 6.25%; background-color: rgba(200,200,0,0.2)">Partially Passed</th>
+                <td style="width: 6.25%">
+                    <input class="add-box" name="test_cases_partially_passed" type="number" style="text-align: center; width: 75px; height: 25px" min="{{form.test_cases_partially_passed.value}}" value="{{form.test_cases_partially_passed.value}}" onKeyDown="return false">
+                </td>
+                <th style="width: 6.25%">
+                    Entered
+                </th>
+                <td style="width: 6.25%" id="partiallyPassedTC">{{form.test_cases_partially_passed.value}}</td>
+                <th style="width: 6.25%; background-color: rgba(200,200,0,0.2)">Medium</th>
+                <td style="width: 6.25%">
+                    <input class="add-box" name="medium_issues" type="number" style="text-align: center; width: 75px; height: 25px" min="{{form.medium_issues.value}}" value="{{form.medium_issues.value}}" onKeyDown="return false">
+                </td>
+                <th style="width: 6.25%">
+                    Reported
+                </th>
+                <td style="width: 6.25%" id="mediumISS">{{form.medium_issues.value}}</td>
+            </tr>
+            <tr style="height: 41px">
+                <th style="width: 6.25%; background-color: rgba(255,120,0,0.2)">Blocked</th>
+                <td style="width: 6.25%">
+                    <input class="add-box" name="test_cases_blocked" type="number" style="text-align: center; width: 75px; height: 25px" min="{{form.test_cases_blocked.value}}" value="{{form.test_cases_blocked.value}}" onKeyDown="return false">
+                </td>
+                <th style="width: 6.25%">
+                    Entered
+                </th>
+                <td style="width: 6.25%" id="blockedTC">{{form.test_cases_blocked.value}}</td>
+                <th style="width: 6.25%; background-color: rgba(0,200,0,0.2)">Minor</th>
+                <td style="width: 6.25%">
+                    <input class="add-box" name="minor_issues" type="number" style="text-align: center; width: 75px; height: 25px" min="{{form.minor_issues.value}}" value="{{form.minor_issues.value}}" onKeyDown="return false">
+                </td>
+                <th style="width: 6.25%">
+                    Reported
+                </th>
+                <td style="width: 6.25%" id="minorISS">{{form.minor_issues.value}}</td>
+            </tr>
+            <tr style="height: 41px">
+                <th style="width: 6.25%; background-color: rgba(255,0,0,0.2)">Failed</th>
+                <td style="width: 6.25%">
+                    <input class="add-box" name="test_cases_failed" type="number" style="text-align: center; width: 75px; height: 25px" min="{{form.test_cases_failed.value}}" value="{{form.test_cases_failed.value}}" onKeyDown="return false">
+                </td>
+                <th style="width: 6.25%">
+                    Entered
+                </th>
+                <td style="width: 6.25%" id="failedTC">{{form.test_cases_failed.value}}</td>
+                <th style="width: 6.25%; background-color: rgba(0,0,200,0.2)">Optional</th>
+                <td style="width: 6.25%">
+                    <input class="add-box" name="optional_issues" type="number" style="text-align: center; width: 75px; height: 25px" min="{{form.optional_issues.value}}" value="{{form.optional_issues.value}}" onKeyDown="return false">
+                </td>
+                <th style="width: 6.25%">
+                    Reported
+                </th>
+                <td style="width: 6.25%" id="optionalISS">{{form.optional_issues.value}}</td>
+            </tr>
+            <tr style="height: 30px">
+                <td colspan="8" rowspan="2">
+                    <table class="hidden-table" style="table-layout: fixed; height: 98%; width: 100%">
+                        <tr>
+                            <td>
+                                <div style="width: 100%; margin: 0px; padding: 0px">
+                                    <canvas id="barTC" style="background: rgba(255,255,255,0.2)"></canvas>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="width: 100%; margin: 0px; padding: 0px">
+                                    <canvas id="barRT" style="background: rgba(255,255,255,0.2)"></canvas>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style="width: 100%; margin: 0px; padding: 0px">
+                                    <canvas id="pieTC" style="background: rgba(255,255,255,0.2)"></canvas>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="width: 100%; margin: 0px; padding: 0px">
+                                    <canvas id="pieRT" style="background: rgba(255,255,255,0.2)"></canvas>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <th colspan="4">Project Description</th>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    {% for project in projects %}
+                        {% if project.project_name == object.on_project %}
+                            <div >
+                                <pre class="proj-desc" style="width: 97%; height: 410px; margin: 5px; text-align: left">{{project.description}}</pre>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
         </table>
     </form>
+    <script>
+        const bcLabelsTC = ["Started", "Passed", "Partially", "Blocked", "Failed"]
+        const startedTC = document.getElementById("startedTC").innerText*1
+        const passedTC = document.getElementById("passedTC").innerText*1
+        const partiallyPassedTC = document.getElementById("partiallyPassedTC").innerText*1
+        const blockedTC = document.getElementById("blockedTC").innerText*1
+        const failedTC = document.getElementById("failedTC").innerText*1
+        const totalTC = startedTC*1 + passedTC*1 + partiallyPassedTC*1 + blockedTC*1 + failedTC*1
+        const bcValuesTC = [startedTC, passedTC, partiallyPassedTC, blockedTC, failedTC]
+        const bcColorsTC = ["rgba(0,0,160,0.6)", "rgba(0,200,0,0.6)", "rgba(200,200,0,0.6)", "rgba(255,120,0,0.6)", "rgba(255,0,0,0.6)"]
+
+        Chart.defaults.color = "rgb(0,0,0)"
+
+        new Chart("barTC", {
+            type: "bar",
+            data:{
+                labels: bcLabelsTC,
+                datasets: [{
+                    backgroundColor: bcColorsTC,
+                    borderWidth: 1,
+                    borderColor: "rgb(0,0,0)",
+                    data: bcValuesTC,
+                },]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: "Test Case Results",
+                    },
+                },
+            },
+        });
+
+        const bcLabelsRT = ["Critical", "Major", "Medium", "Minor", "Optional"]
+        const criticalRT = document.getElementById("criticalISS").innerText*1
+        const majorRT = document.getElementById("majorISS").innerText*1
+        const mediumRT = document.getElementById("mediumISS").innerText*1
+        const minorRT = document.getElementById("minorISS").innerText*1
+        const optionalRT = document.getElementById("optionalISS").innerText*1
+        const totalRT = criticalRT*1 + majorRT*1 + mediumRT*1 + minorRT*1 + optionalRT*1
+        const bcValuesRT = [criticalRT, majorRT, mediumRT, minorRT, optionalRT]
+        const bcColorsRT = ["rgba(255,0,0,0.6)","rgba(255,120,0,0.6)", "rgba(200,200,0,0.6)", "rgba(0,200,0,0.6)", "rgba(0,0,160,0.6)"]
+        var optionRT = {
+            maintainAspectRatio: false
+        }
+
+        new Chart("barRT", {
+            type: "bar",
+            data:{
+                labels: bcLabelsRT,
+                datasets: [{
+                    backgroundColor: bcColorsRT,
+                    borderWidth: 1,
+                    borderColor: "rgb(0,0,0)",
+                    data: bcValuesRT,
+                },]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: "Ticker Reporting Results",
+                    },
+                },
+            },
+        });
+
+        const pcValuesTC = [Math.round(startedTC / totalTC * 100), Math.round(passedTC / totalTC * 100), Math.round(partiallyPassedTC / totalTC * 100), Math.round(blockedTC / totalTC * 100), Math.round(failedTC / totalTC * 100)]
+        new Chart("pieTC", {
+            plugins: [ChartDataLabels],
+            type: "pie",
+            data:{
+                labels: bcLabelsTC,
+                datasets: [{
+                    backgroundColor: bcColorsTC,
+                    borderWidth: 1,
+                    borderColor: "rgb(0,0,0)",
+                    data: pcValuesTC,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    datalabels: {
+                        formatter: function(value, context){
+                            return value + "%";
+                        },
+                    },
+                    legend: {
+                        display: true,
+                        position: "left",
+                        labels: {
+                            boxWidth: 15,
+                        },
+                    },
+                    title: {
+                        display: true,
+                        text: "Test Case Results %",
+                    },
+                    tooltips: {
+                        enabled: true,
+                        mode: "single",
+                        callbacks: {
+                            label: function (tooltipItems, data) {
+                                return tooltipItems.yLabel + "%";
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        const pcValuesRT = [Math.round(criticalRT / totalRT * 100), Math.round(majorRT / totalRT * 100), Math.round(mediumRT / totalRT * 100), Math.round(minorRT / totalRT * 100), Math.round(optionalRT / totalRT * 100)]
+        new Chart("pieRT", {
+            plugins: [ChartDataLabels],
+            type: "pie",
+            data:{
+                labels: bcLabelsRT,
+                datasets: [{
+                    backgroundColor: bcColorsRT,
+                    borderWidth: 1,
+                    borderColor: "rgb(0,0,0)",
+                    data: pcValuesRT,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    datalabels: {
+                        formatter: function(value, context){
+                            return value + "%";
+                        },
+                    },
+                    legend: {
+                        display: true,
+                        position: "right",
+                        labels: {
+                            boxWidth: 15,
+                            textAlign: "left",
+                        },
+                    },
+                    title: {
+                        display: true,
+                        text: "Ticket Reporting %",
+                    },
+                },
+            },
+        });
+    </script>
 {% endblock %}

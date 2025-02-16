@@ -25,4 +25,5 @@ urlpatterns = [
     path("manage-locations", views.ManageLocations.as_view(), name="manage-locations"),
     path("password_reset", views.ResetPasswordView.as_view(), name="password_reset"),
     path("<int:pk>/daily-report", views.ReportCompleting.as_view(), name="daily-report"),
+    # path("report-redirect", views.report_redirect(), name="report-redirect"),
 ]

@@ -67,9 +67,11 @@
             {% if item.id == request.user.id %}
                 {% if item.user_type == "Tester" %}
                     {% for rep in report %}
-                        <a style="text-decoration: none" href="{% url 'KPIndustry:daily-report' rep.id %}">
-                            <p class="menu-btn">Project Report</p>
-                        </a>
+                        {% if rep.on_project == item.on_project %}
+                            <a style="text-decoration: none" href="{% url 'KPIndustry:daily-report' rep.id %}">
+                                <p class="menu-btn">Project Report</p>
+                            </a>
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
             {% endif %}
