@@ -262,7 +262,6 @@ class PersonalInfoView(LoginRequiredMixin, DetailView):
         context["admins"] += list(UserList.objects.filter(user_type="Accountant").values_list("id", flat=True))
         context["reports"] = KPIReport.objects.all()
         context["usertype"] = {"usertype": UserList.objects.filter(id=self.request.user.id).values_list("user_type", flat=True)}
-        print(context["usertype"]["usertype"])
         context["today_date"] = {"date": str(datetime.date.today().strftime("%d-%m-%Y"))}
         context["reports_num"] = {"num": len(list(KPIReport.objects.filter(reporter_id_id=self.object.id)))}
         context["reports_num_proj"] = {"num": len(list(KPIReport.objects.filter(reporter_id_id=self.object.id, on_project=self.object.on_project))) if

@@ -165,29 +165,29 @@
                 </th>
                 <td style="width: 6.25%" id="optionalISS">{{form.optional_issues.value}}</td>
             </tr>
-            <tr style="height: 30px">
+            <tr style="height: 1px">
                 <td colspan="8" rowspan="2">
-                    <table class="hidden-table" style="table-layout: fixed; height: 98%; width: 100%">
+                    <table class="hidden-table" style="table-layout: fixed">
                         <tr>
                             <td>
-                                <div style="width: 100%; margin: 0px; padding: 0px">
+                                <div style="display: inline-block; height: 215px; width: 100%">
                                     <canvas id="barTC" style="background: rgba(255,255,255,0.2)"></canvas>
                                 </div>
                             </td>
                             <td>
-                                <div style="width: 100%; margin: 0px; padding: 0px">
+                                <div style="display: inline-block; height: 215px; width: 100%">
                                     <canvas id="barRT" style="background: rgba(255,255,255,0.2)"></canvas>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <div style="width: 100%; margin: 0px; padding: 0px">
+                                <div style="display: inline-block; height: 215px; width: 100%">
                                     <canvas id="pieTC" style="background: rgba(255,255,255,0.2)"></canvas>
                                 </div>
                             </td>
                             <td>
-                                <div style="width: 100%; margin: 0px; padding: 0px">
+                                <div style="display: inline-block; height: 215px; width: 100%">
                                     <canvas id="pieRT" style="background: rgba(255,255,255,0.2)"></canvas>
                                 </div>
                             </td>
@@ -200,9 +200,11 @@
                 <td colspan="4">
                     {% for project in projects %}
                         {% if project.project_name == object.on_project %}
-                            <div >
-                                <pre class="proj-desc" style="width: 97%; height: 410px; margin: 5px; text-align: left">{{project.description}}</pre>
-                            </div>
+                            {% if project.active == True %}
+                                <div >
+                                    <pre class="proj-desc" style="width: 97%; height: 410px; margin: 5px; text-align: left">{{project.description}}</pre>
+                                </div>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </td>
