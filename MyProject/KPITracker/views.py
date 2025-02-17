@@ -128,6 +128,8 @@ def finish_project(request, pk):
     Projects.objects.filter(id=pk, end_date=None).update(active=False)
     Projects.objects.filter(id=pk, end_date=None).update(project_activity="Finished")
     Projects.objects.filter(id=pk, end_date=None).update(end_date=datetime.datetime.now())
+    print(Projects.objects.filter(id=pk).values_list("project_name", flat=True))
+    UserList.objects.filter(on_project="").update(on_project=None)
 
     return redirect("KPIndustry:manage-projects")
 
@@ -250,15 +252,21 @@ class PersonalInfoView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["report"] = KPIReport.objects.filter(reporter_id=self.request.user.id,report_date=datetime.date.today().strftime("%d-%m-%Y"))
-        context["report1"] = {"report": KPIReport.objects.filter(reporter_id=self.request.user.id,report_date=datetime.date.today().strftime("%d-%m-%Y"))}
+        context["report"] = KPIReport.objects.filter(reporter_id=self.object.id,report_date=datetime.date.today().strftime("%d-%m-%Y"))
+        context["name"] = {"full": f"{self.object.first_name} {self.object.last_name}"}
+        if self.object.user_type == "Project Manager":
+            context["my_projects"] = Projects.objects.filter(project_manager=f"{self.object.first_name} {self.object.last_name}", active=True)
+        context["report1"] = {"report": KPIReport.objects.filter(reporter_id=self.object.id,report_date=datetime.date.today().strftime("%d-%m-%Y"))}
         context["users"] = UserList.objects.all()
         context["admins"] = list(UserList.objects.filter(user_type="Administrator").values_list("id", flat=True))
         context["admins"] += list(UserList.objects.filter(user_type="Accountant").values_list("id", flat=True))
         context["reports"] = KPIReport.objects.all()
+        context["usertype"] = {"usertype": UserList.objects.filter(id=self.request.user.id).values_list("user_type", flat=True)}
+        print(context["usertype"]["usertype"])
         context["today_date"] = {"date": str(datetime.date.today().strftime("%d-%m-%Y"))}
         context["reports_num"] = {"num": len(list(KPIReport.objects.filter(reporter_id_id=self.object.id)))}
-        context["reports_num_proj"] = {"num": len(list(KPIReport.objects.filter(reporter_id_id=self.object.id, on_project=self.object.on_project)))}
+        context["reports_num_proj"] = {"num": len(list(KPIReport.objects.filter(reporter_id_id=self.object.id, on_project=self.object.on_project))) if
+                                       len(list(KPIReport.objects.filter(reporter_id_id=self.object.id, on_project=self.object.on_project))) > 0 else 1}
         return context
 
 
@@ -292,20 +300,12 @@ class LogIn(LoginView):
         user_id = self.request.user.id
         date = datetime.date.today().strftime("%d-%m-%Y")
         project = UserList.objects.filter(id=user_id).values_list("on_project", flat=True)[0]
-        if UserList.objects.filter(id=user_id).values_list("user_type", flat=True)[0] == "Tester":
-            if not KPIReport.objects.filter(reporter_id=user_id, report_date=date, on_project=project).exists():
-                if project:
-                    KPIReport.objects.create(reporter_id=UserList.objects.filter(id=user_id).get(), on_project=str(project), report_date=date)
+        if project != "None":
+            if UserList.objects.filter(id=user_id).values_list("user_type", flat=True)[0] == "Tester":
+                if not KPIReport.objects.filter(reporter_id=user_id, report_date=date, on_project=project).exists():
+                    if project:
+                        KPIReport.objects.create(reporter_id=UserList.objects.filter(id=user_id).get(), on_project=str(project), report_date=date)
         return reverse("KPIndustry:homepage")
-
-@login_required
-def report_redirect(request):
-    date = datetime.date.today().strftime("%d-%m-%Y")
-    user_id = request.users.id
-    project = UserList.objects.filter(id=request.users.id).values_list("on_project", flat=True)
-    report_pk = KPIReport.objects.filter(reporter_id=user_id, report_date=date, on_project=project)
-
-    return
 
 class ReportCompleting(LoginRequiredMixin, UpdateView):
     model = KPIReport

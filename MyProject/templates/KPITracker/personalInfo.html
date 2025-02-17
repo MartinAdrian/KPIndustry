@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block content2 %}
-    {% if object.id == request.user.id or request.user.id in admins %}
+    {% if object.id == request.user.id or usertype.usertype != "Tester" %}
         <table class="content-table full">
             <tr>
                 <th style="height: 2px; font-size: 27px" colspan="20">Personal Information</th>
@@ -24,32 +24,62 @@
                 <th style="height: 2px; width: 140px">Position</th>
                 <td style="width: 150px">{{object.user_type}}</td>
                 <td rowspan="3" style="width: 1200px">
-                    <table class="hidden-table" style="table-layout: fixed">
-                        <tr>
-                            <td>
-                                <div style="display: inline-block; height: 362px; width: 100%">
-                                    <canvas id="c_project_issues" style="background: rgba(255,255,255,0.2)"></canvas>
-                                </div>
-                            </td>
-                            <td>
-                                <div style="display: inline-block; height: 362px; width: 100%">
-                                    <canvas id="c_project_issues_o" style="background: rgba(255,255,255,0.2)"></canvas>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div style="display: inline-block; height: 362px; width: 100%">
-                                    <canvas id="c_project_tcs" style="background: rgba(255,255,255,0.2)"></canvas>
-                                </div>
-                            </td>
-                            <td>
-                                <div style="display: inline-block; height: 362px; width: 100%">
-                                    <canvas id="c_project_tcs_o" style="background: rgba(255,255,255,0.2)"></canvas>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                    {% if object.user_type == "Tester" %}
+                        <table class="hidden-table" style="table-layout: fixed">
+                            <tr>
+                                <td>
+                                    <div style="display: inline-block; height: 362px; width: 100%">
+                                        <canvas id="c_project_issues" style="background: rgba(255,255,255,0.2)"></canvas>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="display: inline-block; height: 362px; width: 100%">
+                                        <canvas id="c_project_issues_o" style="background: rgba(255,255,255,0.2)"></canvas>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: inline-block; height: 362px; width: 100%">
+                                        <canvas id="c_project_tcs" style="background: rgba(255,255,255,0.2)"></canvas>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="display: inline-block; height: 362px; width: 100%">
+                                        <canvas id="c_project_tcs_o" style="background: rgba(255,255,255,0.2)"></canvas>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    {% endif %}
+                    {% if object.user_type == "Project Manager" %}
+                        <table class="hidden-table" style="table-layout: fixed">
+                            <tr>
+                                <td>
+                                    <div style="display: inline-block; height: 362px; width: 100%">
+                                        <canvas id="apTestersAndLeadT" style="background: rgba(255,255,255,0.2)"></canvas>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="display: inline-block; height: 362px; width: 100%">
+                                        <canvas style="background: rgba(255,255,255,0.2)"></canvas>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="display: inline-block; height: 362px; width: 100%">
+                                        <canvas style="background: rgba(255,255,255,0.2)"></canvas>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="display: inline-block; height: 362px; width: 100%">
+                                        <canvas style="background: rgba(255,255,255,0.2)"></canvas>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -73,20 +103,26 @@
     {% endif %}
     <script>
 
+        {% if object.user_type == "Tester" %}
         const issue_labels = ["Critical", "Major", "Medium", "Minor", "Optional"]
         const tcs_labels = ["Started", "Passed", "Partially", "Blocked", "Failed"]
         const issue_colors = ["rgba(255,0,0,0.6)","rgba(255,120,0,0.6)", "rgba(200,200,0,0.6)", "rgba(0,200,0,0.6)", "rgba(0,0,160,0.6)"]
         const tcs_colors = ["rgba(0,0,160,0.6)", "rgba(0,200,0,0.6)", "rgba(200,200,0,0.6)", "rgba(255,120,0,0.6)", "rgba(255,0,0,0.6)"]
+
+        let tCritical = 0
+        let tMajor = 0
+        let tMedium = 0
+        let tMinor = 0
+        let tOptional = 0
         {% for rep in report %}
             {% if rep.on_project == object.on_project %}
-                let tCritical = "{{rep.critical_issues}}"
-                let tMajor = "{{rep.major_issues}}"
-                let tMedium = "{{rep.medium_issues}}"
-                let tMinor = "{{rep.minor_issues}}"
-                let tOptional = "{{rep.optional_issues}}"
+                tCritical = "{{rep.critical_issues}}"
+                tMajor = "{{rep.major_issues}}"
+                tMedium = "{{rep.medium_issues}}"
+                tMinor = "{{rep.minor_issues}}"
+                tOptional = "{{rep.optional_issues}}"
             {% endif %}
         {% endfor %}
-
         let tIssues = [tCritical, tMajor, tMedium, tMinor, tOptional]
 
         const stop_please = [0,0,0,0,0]
@@ -136,7 +172,7 @@
             {% endif %}
         {% endfor %}
         let poIssues = [poCritical / {{reports_num_proj.num}}, poMajor / {{reports_num_proj.num}}, poMedium / {{reports_num_proj.num}}, poMinor / {{reports_num_proj.num}}, poOptional / {{reports_num_proj.num}}]
-
+        console.log("{{reports_num_proj.num}}")
         let oCritical = 0
         let oMajor = 0
         let oMedium = 0
@@ -144,16 +180,15 @@
         let oOptional = 0
         {% for repo in reports %}
             {% if repo.reporter_id_id == object.id %}
-                {% if repo.on_project == object.on_project %}
-                    oCritical += {{repo.critical_issues}}
-                    oMajor += {{repo.major_issues}}
-                    oMedium += {{repo.medium_issues}}
-                    oMinor += {{repo.minor_issues}}
-                    oOptional += {{repo.optional_issues}}
-                {% endif %}
+                oCritical += {{repo.critical_issues}}
+                oMajor += {{repo.major_issues}}
+                oMedium += {{repo.medium_issues}}
+                oMinor += {{repo.minor_issues}}
+                oOptional += {{repo.optional_issues}}
             {% endif %}
         {% endfor %}
         let oIssues = [oCritical / {{reports_num.num}}, oMajor / {{reports_num.num}}, oMedium / {{reports_num.num}}, oMinor / {{reports_num.num}}, oOptional / {{reports_num.num}}]
+        console.log(oMajor)
 
         new Chart("c_project_issues_o", {
             type: "bar",
@@ -190,13 +225,19 @@
                 },
             },
         })
+
+        let tStarted = 0
+        let tPassed = 0
+        let tPartiallyPassed = 0
+        let tBlocked = 0
+        let tFailed = 0
         {% for rep in report %}
             {% if rep.on_project == object.on_project %}
-                let tStarted = {{rep.test_cases_started}}
-                let tPassed = {{rep.test_cases_passed}}
-                let tPartiallyPassed = {{rep.test_cases_partially_passed}}
-                let tBlocked = {{rep.test_cases_blocked}}
-                let tFailed = {{rep.test_cases_failed}}
+                tStarted = {{rep.test_cases_started}}
+                tPassed = {{rep.test_cases_passed}}
+                tPartiallyPassed = {{rep.test_cases_partially_passed}}
+                tBlocked = {{rep.test_cases_blocked}}
+                tFailed = {{rep.test_cases_failed}}
             {% endif %}
         {% endfor %}
         let tTCS = [tStarted, tPassed, tPartiallyPassed, tBlocked, tFailed]
@@ -296,6 +337,68 @@
                 },
             },
         })
+        {% endif %}
+        {% if object.user_type == "Project Manager" %}
+
+            Chart.defaults.color = "rgb(0,0,0)"
+
+            {% for project in my_projects %}
+                let {{project.project_name}}_testers = 0
+                let {{project.project_name}}_leadtesters = 0
+                {% for user in users %}
+                    {% if user.on_project == project.project_name %}
+                        {% if user.user_type == "Tester" %}
+                            {{project.project_name}}_testers += 1
+                        {% endif %}
+                        {% if user.user_type == "Lead Tester" %}
+                            {{project.project_name}}_leadtesters += 1
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+
+            {% for project in my_projects %}
+
+            {% endfor %}
+
+            new Chart("apTestersAndLeadT", {
+                type: "bar",
+                data: {
+                    labels: [{% for project in my_projects %}"{{project.project_name}}",{% endfor %}],
+                    datasets: [
+                            {
+                                label: "Tester",
+                                backgroundColor: "rgba(0,200,0,0.6)",
+                                borderWidth: 1,
+                                borderColor: "rgb(0,0,0)",
+                                data: [{% for project in my_projects %}{{project.project_name}}_testers,{% endfor %}],
+                            },
+                            {
+                                label: "Lead Tester",
+                                backgroundColor: "rgba(255,120,0,0.6)",
+                                borderWidth: 1,
+                                borderColor: "rgb(0,0,0)",
+                                data: [{% for project in my_projects %}{{project.project_name}}_leadtesters,{% endfor %}],
+                            },
+                    ],
+                },
+                options: {
+                    reactive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Tester and Lead Tester number / Project",
+                        },
+                        legend: {
+                            labels: {
+                                boxWidth: 15,
+                            },
+                        },
+                    },
+                },
+            })
+        {% endif %}
 
     </script>
 {% endblock %}

@@ -45,7 +45,7 @@
                             {% if user.user_type == "Lead Tester" and user.on_project == "None" %}
                                 <tr>
                                     <td>
-                                        <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
+                                        <a href="{% url 'KPIndustry:pers-view' pk=user.id %}" style="color: black"><p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p></a>
                                     </td>
                                     <td>
                                         <a class="add-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-add-project' object.id user.id %}">></a>
@@ -65,7 +65,7 @@
                                     <a class="deactivate-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-rem-project' object.id user.id %}"><</a>
                                 </td>
                                 <td>
-                                    <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
+                                    <a href="{% url 'KPIndustry:pers-view' pk=user.id %}" style="color: black"><p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p></a>
                                 </td>
                             </tr>
                         {% endif %}
@@ -78,7 +78,7 @@
                         {% if user.user_type == "Tester" and user.on_project == "None" %}
                             <tr>
                                 <td>
-                                    <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
+                                    <a href="{% url 'KPIndustry:pers-view' pk=user.id %}" style="color: black"><p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p></a>
                                 </td>
                                 <td>
                                     <a class="add-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-add-project' object.id user.id %}">></a>
@@ -98,7 +98,7 @@
                                         <a class="deactivate-btn" style="padding-left: 2px; padding-right: 2px" href="{% url 'KPIndustry:user-rem-project' object.id user.id %}"><</a>
                                     </td>
                                     <td>
-                                        <p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p>
+                                        <a href="{% url 'KPIndustry:pers-view' pk=user.id %}" style="color: black"><p style="margin: 0px; padding: 0px">{{user.first_name}} {{user.last_name}}</p></a>
                                     </td>
                                 </tr>
                             {% endif %}
@@ -298,7 +298,7 @@
                     },
                     title: {
                         display: true,
-                        text: "Ticket Report Overview",
+                        text: "Test Cases Overview",
                     },
                 },
             },

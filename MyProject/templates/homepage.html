@@ -15,24 +15,54 @@
   <div style="padding-top: 5px; height: calc(100% - 5px); width: calc(100% - 20px - 200px)">
     <div class="content-area">
       {% block content2 %}
+        <h1 style="text-align: center; width: 100%">KPI Tracker made by Adrian Martin</h1>
         {% for item in users %}
             {% if item.id == request.user.id %}
                 {% if item.user_type == "Administrator" %}
-                    <h1 style="text-align: center; width: 100%">KPI Tracker made by Adrian Martin</h1>
                     <h3>Manage Users</h3>
-                    <p style="margin-left: 15px">You are able to add, remove or change employees data.</p>
-                    <p style="margin-left: 15px">It's also a place to see every persons information, such as:</p>
-                    <p style="margin-left: 25px">- First Name</p>
-                    <p style="margin-left: 25px">- Last Name</p>
-                    <p style="margin-left: 25px">- eMail</p>
-                    <p style="margin-left: 25px">- Username</p>
-                    <p style="margin-left: 25px">- User type</p>
-                    <p style="margin-left: 25px">- What project/s the person is assigned to</pv>
-                    <p style="margin-left: 25px">- If they are active or not</p>
-                    <p style="margin-left: 15px"></p>
+                    <p style="margin-left: 15px">It's the place where you can see the whole list of registered users and change some of their data or even deactivate them.</p>
+                    <p style="margin-left: 15px">You can also see each person's individual info by clicking on their name or see project information by selecting it from the Project Manager's
+                    project dropdowns.</p>
+                    <p style="margin-left: 15px">Unique Fields (can never exist 2 instances with the same): Username.</p>
+                    <h3>Manage Projects</h3>
+                    <p style="margin-left: 15px">The place to create or modify projects like changing name or switching Project Managers.</p>
+                    <p style="margin-left: 15px">Please note that once a project is closed, it cannot be reopened and a new instance has to be created!</p>
+                    <h3>Manage Locations</h3>
+                    <p style="margin-left: 15px">You can manage the work locations which are assigned to the people registered.</p>
+                    <p style="margin-left: 15px">Please note that you have to press the search button in order to get the latitude and longitude of the location!</p>
                 {% endif %}
             {% endif %}
         {% endfor %}
+        {% for item in users %}
+            {% if item.id == request.user.id %}
+                {% if item.user_type == "Project Manager" %}
+                    <h3>View Your Projects</h3>
+                    <p style="margin-left: 15px">You can see your allocated projects and manage them.</p>
+                    <p style="margin-left: 15px">In the managing screen, you can add or remove Testers and Lead Testers from the project while also changing the description of the project.</p>
+                    <p style="margin-left: 15px">The managing screen also contains KPI metrics for the projects such as: Ticket Report Overview (For Today and on Average) and Test Cases Overview (For Today and Average)</p>
+                    <p style="margin-left: 15px">You can also click on the names inside the manager in order to see more specific information and KPI</p>
+                    <p style="margin-left: 15px">Please make sure to remove any Lead Testers and Testers from the project whenever it is closed!</p>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% for item in users %}
+            {% if item.id == request.user.id %}
+                {% if item.user_type == "Tester" %}
+                    <h3>Project Report</h3>
+                    <p style="margin-left: 15px">You can see and fill in your report for Today on the Currently Allocated Project.</p>
+                    <p style="margin-left: 15px">Available data to be completed:</p>
+                    <p style="margin-left: 15px">- Test Cases KPIs: Note down the number of test cases remaining of each category before clocking out</p>
+                    <p style="margin-left: 15px">- Reported Issues KPIs: Fill and save throughout your day</p>
+                    <p style="margin-left: 15px">- Testing Overview: Note down any key aspects or information gathered throughout the testing process</p>
+                    <p style="margin-left: 15px">Make sure to save the report regularly!</p>
+                    <p style="margin-left: 15px">Please note that when you are transferred to another project, a new report for that project will be generated!</p>
+                    <p style="margin-left: 15px">If you have saved data for a project report in a day, the report will be available and will be shown when reassigned on that project!</p>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <h3>Personal Info</h3>
+        <p style="margin-left: 15px">The place to see all your user information and results assessment which differs for every user type: KPI for Testers and project info for Project Managers</p>
+        <p style="margin-left: 15px">Please note that testers cannot see other people's info, but Lead Testers and up can see everyone's info!</p>
       {% endblock %}
     </div>
   </div>
@@ -66,13 +96,15 @@
         {% for item in users %}
             {% if item.id == request.user.id %}
                 {% if item.user_type == "Tester" %}
-                    {% for rep in report %}
-                        {% if rep.on_project == item.on_project %}
-                            <a style="text-decoration: none" href="{% url 'KPIndustry:daily-report' rep.id %}">
-                                <p class="menu-btn">Project Report</p>
-                            </a>
-                        {% endif %}
-                    {% endfor %}
+                    {% if item.on_project != "None" %}
+                        {% for rep in report %}
+                            {% if rep.on_project == item.on_project %}
+                                <a style="text-decoration: none" href="{% url 'KPIndustry:daily-report' rep.id %}">
+                                    <p class="menu-btn">Project Report</p>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 {% endif %}
             {% endif %}
         {% endfor %}

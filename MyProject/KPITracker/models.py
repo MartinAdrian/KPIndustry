@@ -26,15 +26,19 @@ class Projects(models.Model):
     def save(self, *args, **kwargs):
         if not self.start_date and not self.end_date:
             self.project_activity = "Not Started"
+            self.active = True
             super(Projects, self).save(*args, **kwargs)
         elif self.start_date and self.end_date:
             self.project_activity = "Finished"
             self.active = False
             super(Projects, self).save(*args, **kwargs)
-        else:
+        elif self.start_date and not self.end_date:
             if not self.start_date:
-                self.project_activity = "Ongoing"
                 self.start_date = datetime.datetime.now()
+            self.project_activity = "Ongoing"
+            self.active = True
+            super(Projects, self).save(*args, **kwargs)
+        else:
             super(Projects, self).save(*args, **kwargs)
 
     def __str__(self):
