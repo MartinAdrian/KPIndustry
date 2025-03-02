@@ -12,14 +12,14 @@
 {% endblock %}
 
 {% block content2 %}
-    {% if object.id == request.user.id or usertype.usertype != "Tester" %}
+    {% if object.id == request.user.id or "Tester" not in usertype.usertype %}
         <table class="content-table full">
             <tr>
                 <th style="height: 2px; font-size: 27px" colspan="20">Personal Information</th>
             </tr>
             <tr>
                 <td style="width: 5%" rowspan="2">Photo</td>
-                <th style="height: 40px; width: 2px">Name</th>
+                <th style="height: 40px; width: 2px">Last Name</th>
                 <td style="width: 200px">{{object.last_name}}</td>
                 <th style="height: 2px; width: 140px">Position</th>
                 <td style="width: 150px">{{object.user_type}}</td>
@@ -83,11 +83,14 @@
                 </td>
             </tr>
             <tr>
-                <th style="height: 40px; width: 2px">Surname</th>
+                <th style="height: 40px; width: 2px">First Name</th>
                 <td>{{object.first_name}}</td>
                 <th>Allocated Project</th>
                 <td>
-                    {% if object.user_type != "Tester" or object.user_type != "Lead Tester" %}
+                    <script>
+                        console.log("{{object.on_project}}")
+                    </script>
+                    {% if object.on_project == "None" %}
                         Not Applicable
                     {% else %}
                         {{object.on_project}}

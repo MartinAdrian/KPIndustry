@@ -128,8 +128,7 @@ def finish_project(request, pk):
     Projects.objects.filter(id=pk, end_date=None).update(active=False)
     Projects.objects.filter(id=pk, end_date=None).update(project_activity="Finished")
     Projects.objects.filter(id=pk, end_date=None).update(end_date=datetime.datetime.now())
-    print(Projects.objects.filter(id=pk).values_list("project_name", flat=True))
-    UserList.objects.filter(on_project="").update(on_project=None)
+    UserList.objects.filter(on_project=Projects.objects.filter(id=pk).values_list("project_name", flat=True)[0]).update(on_project="None")
 
     return redirect("KPIndustry:manage-projects")
 
@@ -296,14 +295,15 @@ class LogIn(LoginView):
     template_name = "registration/login.html"
 
     def get_success_url(self):
-        user_id = self.request.user.id
-        date = datetime.date.today().strftime("%d-%m-%Y")
-        project = UserList.objects.filter(id=user_id).values_list("on_project", flat=True)[0]
-        if project != "None":
-            if UserList.objects.filter(id=user_id).values_list("user_type", flat=True)[0] == "Tester":
-                if not KPIReport.objects.filter(reporter_id=user_id, report_date=date, on_project=project).exists():
-                    if project:
-                        KPIReport.objects.create(reporter_id=UserList.objects.filter(id=user_id).get(), on_project=str(project), report_date=date)
+        if not self.request.user.is_superuser:
+            user_id = self.request.user.id
+            date = datetime.date.today().strftime("%d-%m-%Y")
+            project = UserList.objects.filter(id=user_id).values_list("on_project", flat=True)[0]
+            if project != "None":
+                if UserList.objects.filter(id=user_id).values_list("user_type", flat=True)[0] == "Tester":
+                    if not KPIReport.objects.filter(reporter_id=user_id, report_date=date, on_project=project).exists():
+                        if project:
+                            KPIReport.objects.create(reporter_id=UserList.objects.filter(id=user_id).get(), on_project=str(project), report_date=date)
         return reverse("KPIndustry:homepage")
 
 class ReportCompleting(LoginRequiredMixin, UpdateView):

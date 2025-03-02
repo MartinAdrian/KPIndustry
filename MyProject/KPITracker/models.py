@@ -24,19 +24,12 @@ class Projects(models.Model):
     description = models.TextField("Project Description", blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        if not self.start_date and not self.end_date:
+        if not self.active and not self.start_date:
             self.project_activity = "Not Started"
-            self.active = True
             super(Projects, self).save(*args, **kwargs)
-        elif self.start_date and self.end_date:
-            self.project_activity = "Finished"
-            self.active = False
-            super(Projects, self).save(*args, **kwargs)
-        elif self.start_date and not self.end_date:
-            if not self.start_date:
-                self.start_date = datetime.datetime.now()
+        elif self.active and not self.start_date:
+            self.start_date = datetime.datetime.now()
             self.project_activity = "Ongoing"
-            self.active = True
             super(Projects, self).save(*args, **kwargs)
         else:
             super(Projects, self).save(*args, **kwargs)
@@ -54,6 +47,11 @@ class UserList(User):
     gross_salary = models.CharField("Gross Salary", max_length=100, null=True)
     phone_number = models.CharField("Phone Number", null=True, max_length=20)
     work_location = models.CharField("Work Location", null=True, max_length=200)
+
+    def save(self):
+        if "sha256" not in self.password:
+            self.set_password(self.password)
+        super().save()
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}:\neMail: {self.email}\nType: {self.user_type}"
